@@ -1,10 +1,10 @@
 "use client";
+import {useState} from "react";
 import Link from "next/link";
 import Image from "next/image";
-import Profile from "./profile";
-import {useState} from "react";
-import ForumIcon from "@mui/icons-material/Forum";
 import {usePathname} from "next/navigation";
+import ForumIcon from "@mui/icons-material/Forum";
+import Profile from "./profile";
 import Notification from "./notification";
 
 const NavBar = () => {
@@ -105,7 +105,7 @@ const NavBar = () => {
                   {" "}
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
-                    className="h-6 w-6"
+                    className="h-6 w-6 cursor-pointer mx-1"
                     fill="none"
                     viewBox="0 0 24 24"
                     stroke="#ffffff">
@@ -119,8 +119,8 @@ const NavBar = () => {
                 </label>
               </div>
               <div className="drawer-side z-50">
-                <label htmlFor="my-drawer-4" className=" z-50"></label>
-                <ul className=" z-50  bg-sec ">
+                <label htmlFor="my-drawer-4" className="z-50"></label>
+                <ul className="z-50 bg-sec min-w-full min-h-full">
                   <li>
                     <Notification closeNotif={closeNotif} setCloseNotif={setCloseNotif} />
                   </li>
