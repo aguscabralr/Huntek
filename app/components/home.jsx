@@ -15,7 +15,7 @@ const Home = () => {
 				<Conversations />
 				<Interviews />
 			</section>
-			<footer className="h-[10%]">
+			<footer className="h-[10%] min-h-[200px]">
 				<Footbar />
 			</footer>
 		</main>

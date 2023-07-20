@@ -1,5 +1,5 @@
 "use client";
-import {useState} from "react";
+import {useState, useEffect, useRef} from "react";
 import Image from "next/image";
 import FootbarSwipe from "./footbarswipe";
 
@@ -197,9 +197,31 @@ const Swipe = () => {
 	const showInfo = () => {
 		setInfo(!info);
 	};
+	
+	const containerRef = useRef();
+
+  const handleTouchMoveX= (event) => {
+    event.preventDefault();
+  }
+
+	useEffect(() => {
+    const containerElement = containerRef.current;
+    if (containerElement && !info) {
+      containerElement.addEventListener('touchmove', handleTouchMoveX, { passive: false });
+    } else if (containerElement && info) {
+      containerElement.removeEventListener('touchmove', handleTouchMoveX, { passive: false });
+    }
+
+    return () => {
+      if (containerElement) {
+        containerElement.removeEventListener('touchmove', handleTouchMoveX, { passive: false });
+      }
+    }
+  }, [info]);
+
 
 	return (
-		<main className="w-full h-[90%]">
+		<main className="w-full h-[90%]" ref={containerRef}>
 			<section className="w-full h-[93%] pb-10 bg-pri/70 flex flex-col justify-end items-center relative overflow-hidden">
 				{nextCard && (
 					<article
