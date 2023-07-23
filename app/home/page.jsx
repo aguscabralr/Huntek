@@ -3,7 +3,7 @@ import Home from "../components/home";
 
 const HomePage = () => {
 	return (
-		<main className="h-screen bg-sec flex flex-col justify-between">
+		<main className="h-home lightcentergrad flex flex-col justify-between">
 			<NavBar />
 			<Home />
 		</main>

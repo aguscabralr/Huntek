@@ -1,76 +1,70 @@
 import Image from "next/image";
 import Link from "next/link";
+import CloseOutlinedIcon from "@mui/icons-material/CloseOutlined";
+import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
+import NavigateNextOutlinedIcon from "@mui/icons-material/NavigateNextOutlined";
 
-const Profile = () => {
-  return (
-    <section className="z-40 p-0 bg-sec text-pri">
-      <div className="min-w-full h-1/2 ">
-        <div className="flex justify-start mt-10 h-full gap-10 w-[100vw]  items-start flex-col flex-wrap ">
-          <div className="flex-grow w-full">
-            <h2 className="ml-10 text-4xl font-bold mb-12 cursor-default">Mi perfil</h2>
-            <div className="rounded-lg  w-full mb-6 justify-start gap-4 mt-4 relative flex items-center text-pri flex-row">
-              <Link href="/profileExtend">
-                <div className="w-16 h-16 ml-8 avatar">
-                  <Image loading={"eager"}
-                    alt="avatar"
-                    width={100}
-                    height={100}
-                    quality={100}
-                    src="/images/pexels-monstera-5384445.jpg"
-                    className=" rounded-full cursor-pointer"
-                  />
-                </div>
-              </Link>
-              <div>
-                <h3 className=" text-xl font-medium cursor-default">Luis Sanchez</h3>
-                <p className="text-xs sm:text-lg font-light cursor-default">louissaintchess@gmail.com</p>
-              </div>
-              <Link href="/profileExtend">
-                <Image loading={"eager"}
-                  alt="pencil"
-                  width={25}
-                  height={25}
-                  src="/utils/pencil_huntek.svg"
-                  className="absolute right-0 top-5	text-pri hover:opacity-70 mr-5 cursor-pointer "
-                />
-              </Link>
-            </div>
-            <div className="flex-col  flex-wrap w-full ml-1 flex sm:rounded-lg">
-              <Link href="/postulations">
-                <div className="flex flex-grow justify-between mx-8 my-6 hover:opacity-50 cursor-pointer ">
-                  <p className="text-md font-normal">Postulaciones</p>
-                  <Image loading={"eager"} alt="arrow right" width={16} height={16} src="/utils/goto_huntek.svg" />
-                </div>
-              </Link>
-              <Link href="/conversations">
-                <div className="flex flex-row flex-grow justify-between mx-8 my-6 hover:opacity-50 cursor-pointer ">
-                  <p className="text-md font-normal">Conversaciones</p>
-                  <Image loading={"eager"} alt="arrow right" width={16} height={16} src="/utils/goto_huntek.svg" />
-                </div>
-              </Link>
-              <Link href="/notifications">
-                <div className="flex flex-row flex-grow justify-between mx-8 my-6 hover:opacity-50 cursor-pointer ">
-                  <p className="text-md font-normal">Notificaciones</p>
-                  <Image loading={"eager"} alt="arrow right" width={16} height={16} src="/utils/goto_huntek.svg" />
-                </div>
-              </Link>
-              <Link href="/home">
-                <div className="flex flex-row flex-grow justify-between mx-8 my-6 hover:opacity-50 cursor-pointer ">
-                  <p className="text-md font-normal">Términos & Condiciones</p>
-                  <Image loading={"eager"} alt="arrow right" width={16} height={16} src="/utils/goto_huntek.svg" />
-                </div>
-              </Link>
-              <div className="flex flex-row flex-grow justify-between mx-8 my-6">
-                <div>
-                  <p className="text-md font-normal  text-red-500 cursor-pointer hover:opacity-50">Cerrar sesión</p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-  );
+const Profile = ({ user, closeProfile, setCloseProfile }) => {
+	return (
+		<section className="w-full h-screen text-pri flex flex-col">
+			<article className="w-full h-[10%] px-4 border-b flex flex-row justify-between items-center">
+				<div className="w-6 h-6"></div>
+				<h1 className="w-full text-center text-3xl font-bold cursor-default">Mi Perfil</h1>
+				<button
+					onClick={() => {
+						document.getElementById("profile").click();
+						setCloseProfile(!closeProfile);
+					}}
+					className="w-6 h-6 rounded-full grid place-content-center hover:bg-pri-100 hover:scale-125 duration-150">
+					<CloseOutlinedIcon />
+				</button>
+			</article>
+			<article className="w-full h-[90%] p-8 flex flex-col justify-evenly items-center">
+				<div className="w-full h-2/5 flex flex-col justify-center items-center">
+					<div className="w-20 h-20 mb-2 relative">
+						<Image
+							src={user.image}
+							alt="avatar"
+							fill={true}
+							loading={"eager"}
+							className="object-cover rounded-full absolute"
+						/>
+					</div>
+					<div className="flex flex-row items-center">
+						<h3 className="text-2xl font-medium cursor-default">{user.name}</h3>
+						<Link href="/profileExtend" className="ml-2">
+							<EditOutlinedIcon className="w-5 h-5 opacity-70 hover:opacity-100 hover:scale-125 duration-150" />
+						</Link>
+					</div>
+					<p className="text-xs font-normal cursor-default">{user.email}</p>
+				</div>
+				<div className="w-full h-4/5 text-base flex flex-col justify-around items-center">
+					<Link href="/postulations" className="w-full h-1/4 flex justify-between items-center hover:opacity-70">
+						Postulaciones
+						<NavigateNextOutlinedIcon />
+					</Link>
+					<Link href="/conversations" className="w-full h-1/4 flex justify-between items-center hover:opacity-70">
+						Conversaciones
+						<NavigateNextOutlinedIcon />
+					</Link>
+					<Link href="/home" className="w-full h-1/4 flex justify-between items-center hover:opacity-70">
+						Configuración
+						<NavigateNextOutlinedIcon />
+					</Link>
+					<Link href="/home" className="w-full h-1/4 flex justify-between items-center hover:opacity-70">
+						Términos & Condiciones
+						<NavigateNextOutlinedIcon />
+					</Link>
+				</div>
+				<div className="w-full h-1/4 p-8 text-pri-500 flex flex-col justify-evenly items-center">
+					<Link href={"/login"} className="text-red-700 hover:opacity-70">
+						Cerrar sesión
+					</Link>
+					Copyright © 2023 Huntek App
+				</div>
+			</article>
+		</section>
+	);
 };
 
 export default Profile;
