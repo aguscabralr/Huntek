@@ -13,8 +13,9 @@ const EmailCode = () => {
 
 	useEffect(() => {
 		setEmail(localStorage.getItem("email"));
-		console.log(email);
-	}, []);
+		setUserCode({ ...userCode, email });
+		setResendCode({ ...resendCode, email });
+	}, [email]);
 
 	const [successReq, setSuccessReq] = useState(null);
 	const [errorCatched, setErrorCatched] = useState(null);
@@ -22,7 +23,10 @@ const EmailCode = () => {
 	const [postVerif, { isLoading }] = usePostVerifMutation();
 	const [putResendCode] = usePutResendCodeMutation();
 	const inputRefs = useRef([]);
-	const [userCode, setUserCode] = useState({ code: { 0: "", 1: "", 2: "", 3: "", 4: "", 5: "" }, email: `${email}` });
+	const [userCode, setUserCode] = useState({
+		code: { 0: "", 1: "", 2: "", 3: "", 4: "", 5: "" },
+		email: `${email}`,
+	});
 	const [resendCode, setResendCode] = useState({
 		email: `${email}`,
 		order: "account_activation",
