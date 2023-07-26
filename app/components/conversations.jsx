@@ -1,12 +1,22 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import getCookie from "../helpers/getCookies";
+import { useGetChatsMutation } from "../globalstore/services/useChats";
 
 const Conversations = () => {
 	const [chats, setChats] = useState([
-		{ name: "Nico Front", image: "/images/pexels-monstera-5384445.jpg", enterprise: "Huntek", time: "17:00", msg: "2" },
 		{
+			id: 1,
+			name: "Nico Front",
+			image: "/images/pexels-monstera-5384445.jpg",
+			enterprise: "Huntek",
+			time: "17:00",
+			msg: "2",
+		},
+		{
+			id: 2,
 			name: "Agus Cabral",
 			image: "/images/pexels-monstera-5384445.jpg",
 			enterprise: "Huntek",
@@ -14,6 +24,7 @@ const Conversations = () => {
 			msg: "1",
 		},
 		{
+			id: 3,
 			name: "Fran Vazquez",
 			image: "/images/pexels-monstera-5384445.jpg",
 			enterprise: "Huntek",
@@ -21,6 +32,7 @@ const Conversations = () => {
 			msg: "2",
 		},
 		{
+			id: 4,
 			name: "Mati Gigena",
 			image: "/images/pexels-monstera-5384445.jpg",
 			enterprise: "Huntek",
@@ -28,6 +40,15 @@ const Conversations = () => {
 			msg: "5",
 		},
 	]);
+
+	const [getChats, { isLoading }] = useGetChatsMutation();
+
+	useEffect(() => {
+		const user_id = getCookie("AiOiJKV1Q");
+		getChats(user_id).then((response) => {
+			const data = response.data;
+		});
+	}, []);
 
 	return (
 		<article className="w-full h-2/6 px-4 flex flex-col justify-around">
@@ -40,7 +61,10 @@ const Conversations = () => {
 			<div className="w-full h-4/5 px-4 bg-sec text-xs xs:text-sm text-pri border rounded-xl shadow-md carousel carousel-vertical flex flex-col">
 				{chats.map((chat, index) => {
 					return (
-						<div key={index} className="w-full carousel-item flex flex-col justify-between">
+						<Link
+							href={`/conversations/${chat.id}`}
+							key={index}
+							className="w-full carousel-item flex flex-col justify-between">
 							<div className="w-full h-16 carousel-item flex flex-row justify-between">
 								<div className="w-[70%] flex flex-row justify-start items-center">
 									<div className="w-8 h-8 mr-4 rounded-full truncate relative">
@@ -60,7 +84,7 @@ const Conversations = () => {
 								</div>
 							</div>
 							{chats.length !== index + 1 && <hr />}
-						</div>
+						</Link>
 					);
 				})}
 			</div>

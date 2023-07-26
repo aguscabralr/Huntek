@@ -20,7 +20,7 @@ const CompanyForm = () => {
 		company_name: "",
 		email: "",
 		password: "",
-		rol: "company",
+		role_name: "company",
 	});
 
 	const handleChange = (event) => {
@@ -55,7 +55,7 @@ const CompanyForm = () => {
 				company_name: "",
 				email: "",
 				password: "",
-				rol: "company",
+				role_name: "company",
 			});
 			router.push("/verifymail");
 		} catch (error) {
@@ -76,7 +76,7 @@ const CompanyForm = () => {
 						id="company_name"
 						value={input.company_name}
 						className="w-full px-3 bg-transparent outline-none border-b"
-						placeholder="	Mercedes-AMG PETRONAS Formula One Team"
+						placeholder="Mercedes-AMG PETRONAS Formula One Team"
 						onChange={handleChange}
 						autoComplete="off"
 					/>

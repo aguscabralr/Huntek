@@ -1,102 +1,179 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Image from "next/image";
-import SendIcon from "@mui/icons-material/Send";
-import { IconButton } from "@mui/material";
+import Link from "next/link";
 import { useParams } from "next/navigation";
+import getCookie from "../helpers/getCookies";
+import { usePostMessageMutation } from "../globalstore/services/usePostMessage";
+import { useGetMessagesMutation } from "../globalstore/services/useMessages";
+import SendIcon from "@mui/icons-material/Send";
+import ArrowBackOutlinedIcon from "@mui/icons-material/ArrowBackOutlined";
+import AttachFileOutlinedIcon from "@mui/icons-material/AttachFileOutlined";
 
 const ChatUi = () => {
-  const params = useParams();
-  const [message, setMessage] = useState({
-    message: "",
-  });
-  const [messages, setMessages] = useState([]); 
+	const params = useParams();
+	const userData = [
+		{
+			id: 1,
+			name: "Tute Gigena",
+			value:
+				"Aunque nadie lo pueda creer, tienes una nueva cita! De manera totalmente increible, una fémina le dio me gusta a tu carta e hicieron match, estamos seguros de que vas a tener que bañarte por primera vez en los ultimos seis meses.",
+			image: "/huntek/logo/G.svg",
+		},
+		{
+			id: 2,
+			name: "Agustin Ignacio Cabral Robledo",
+			value:
+				"Lamentamos informarte que has sido bloqueado por la usuaria @dualipa_temperley debido a que has spameado su casilla de mensajes.",
+			image: "/social/google.svg",
+		},
+		{
+			id: 3,
+			name: "Marian Font",
+			value: "Hemos actualizado nuestra politica.",
+			image: "/huntek/logo/G.svg",
+		},
+		{
+			id: 4,
+			name: "Maxi Vazquez",
+			value: `Lorem ipsum dolor, sit amet consectetur adipisicing elit. Blanditiis beatae atque qui. Expedita recusandae perferendis cum nihil quos, odio nemo illo eos earum voluptatem fugiat, enim, repudiandae amet ad suscipit.`,
+			image: "/social/google.svg",
+		},
+		{
+			id: 5,
+			name: "Lorem Chueco",
+			value: `Lorem ipsum dolor, etc etc. Quien escribió esto? Por que lo veo en todos lados?`,
+			image: "/huntek/logo/G.svg",
+		},
+		{
+			id: 6,
+			name: "Barack Obama",
+			value: "Debes venir a comer estas enchiladas que hizo Michelle, están buenisimas.",
+			image: "/social/google.svg",
+		},
+		{
+			id: 7,
+			name: "Thomas Holder",
+			value:
+				"Amigo está re picado acá venite con unos vodka, compra Red Bull de sandia si no le digo a los guardias que te saquen. Na mentira jaja.",
+			image: "/huntek/logo/G.svg",
+		},
+	];
 
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    try {
-      const newMessage = {
-        id: messages.length + 1,
-        content: message.message,
-      };
-      setMessages([...messages, newMessage]);
-      setMessage({ message: "" });
-    } catch (error) {
-      console.error(error);
-    }
-  };
+	const openChat = userData.find(({ id }) => id === Number(params.id));
 
-  const handleChange = (event) => {
-    event.preventDefault();
-    setMessage({
-      ...message,
-      [event.target.name]: event.target.value,
-    });
-  };
-  return (
-    <main className="flex flex-col flex-auto bg-pri-200 w-full justify-start h-screen ">
-      <nav className="flex bg-sec shadow-lg pl-6  justify-between h-16  items-center border ">
-        <h1 className="font-medium text-3xl">Nombre del id: {params.id}</h1>
-      </nav>
-      <section className="py-2 px-3 ">
-        <article className="flex flex-col mt-3 border h-[85vh] h-max-[85vh] bg-sec shadow-lg rounded-2xl ">
-          <div className="flex flex-col h-full overflow-x-auto ">
-            <ul className="grid grid-cols-12 gap-y-1">
-              {messages.map((msg) => (
-                <li key={msg.id} className="col-start-6  col-end-13 p-3 rounded-lg">
-                  <div className="flex items-center justify-start flex-row-reverse">
-                    <Image
-                      loading={"eager"}
-                      src="/images/pexels-monstera-5384445.jpg"
-                      alt="profileImg"
-                      width={40}
-                      height={1000}
-                      quality={100}
-                      className="flex items-center justify-center h-10 rounded-full flex-shrink-0"
-                    />
-                    <div className=" flex  mr-3 max-w-sm text-sm bg-indigo-100 p-2  shadow rounded-xl">
-                      <p className="break-words w-full">{msg.content}</p>
-                    </div>
-                  </div>
-                </li>
-              ))}
-            </ul>
-          </div>
-          <footer>
-            <article className="flex w-full rounded-xl bg-white  px-4   items-center h-16">
-              <button className="flex items-center justify-center text-gray-400 hover:text-gray-600">
-                <svg
-                  className="w-5 h-5"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                  xmlns="http://www.w3.org/2000/svg">
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13"></path>
-                </svg>
-              </button>
-              <form onSubmit={handleSubmit} className="relative w-full flex items-center  ml-4">
-                <input
-                  type="text"
-                  name="message"
-                  className="flex w-full bg-sec border rounded-xl focus:outline-none focus:border-indigo-300 pl-4 h-10"
-                  value={message.message}
-                  onChange={handleChange}
-                />
-                <div className="flex items-center justify-center ml-4 rounded-xl text-white    sm:px-2 sm:py-2  flex-shrink-0">
-                  <IconButton onClick={handleSubmit}>
-                    <SendIcon style={{ color: "#046255" }} />
-                  </IconButton>
-                </div>
-              </form>
-            </article>
-          </footer>
-        </article>
-      </section>
-    </main>
-  );
+	const user_id = getCookie("AiOiJKV1Q");
+	const [getMessages, { isLoading }] = useGetMessagesMutation();
+	const [postMessage, {}] = usePostMessageMutation();
+
+	const [message, setMessage] = useState({
+		message: "",
+	});
+
+	const [mensajes, setMensajes] = useState({
+		chat_id: params.id,
+		user_id: user_id,
+		content: "",
+	});
+
+	const [messages, setMessages] = useState([]);
+	useEffect(() => {
+		getMessages(params.id).then((response) => {
+			const data = response.data;
+		});
+	}, []);
+
+	const handleSubmit = async (event) => {
+		event.preventDefault();
+		try {
+			const newMessage = {
+				id: messages.length + 1,
+				content: message.message,
+			};
+			setMessages([...messages, newMessage]);
+			setMessage({ message: "" });
+			const response = await postMessage(mensajes).unwrap();
+			const data = response.data;
+		} catch (error) {
+			console.error(error);
+		}
+	};
+
+	const handleChange = (event) => {
+		event.preventDefault();
+		setMessage({
+			...message,
+			[event.target.name]: event.target.value,
+		});
+	};
+
+	return (
+		<main className="w-full h-screen text-pri flex flex-col justify-between items-center">
+			<nav className="w-full h-[10%] bg-sec flex flex-row justify-start items-center">
+				<Link
+					href="/conversations"
+					className="mx-4 p-1 grid place-content-center rounded-full text-pri hover:bg-pri-200 hover:scale-110 duration-150 ">
+					<ArrowBackOutlinedIcon className="w-6 h-6" />
+				</Link>
+				<article className="w-[90%] flex flex-row justify-start items-center">
+					<div className="w-10 h-10 mr-4 border-2 rounded-full border-pri relative">
+						<Image
+							src={openChat.image}
+							alt="profileImg"
+							fill={true}
+							loading={"eager"}
+							className="rounded-full object-cover absolute"
+						/>
+					</div>
+					<h1 className="w-[85%] text-2xl font-medium line-clamp-1 cursor-default">{openChat.name}</h1>
+				</article>
+			</nav>
+			<section className="w-full h-[90%] p-4 bg-pri flex flex-col justify-center items-center">
+				<article className="w-full h-full border bg-sec shadow-lg rounded-2xl flex flex-col justify-between items-center">
+					<div className="w-full h-[90%] p-2 flex flex-col overflow-x-auto">
+						<ul className="grid grid-cols-12 gap-y-1">
+							{messages.map((msg) => (
+								<li key={msg.id} className="p-3 rounded-lg col-start-3 col-end-13">
+									<div className="w-full flex flex-row-reverse items-center justify-start">
+										<div className="w-8 h-8 ml-2 rounded-full border-2 border-pri relative">
+											<Image
+												src={openChat.image}
+												alt="profileImg"
+												fill={true}
+												loading={"eager"}
+												className="object-cover rounded-full absolute"
+											/>
+										</div>
+										<div className="w-fit max-w-[85%] p-2 text-sm bg-indigo-100 shadow rounded-xl">
+											<p className="break-words w-full">{msg.content}</p>
+										</div>
+									</div>
+								</li>
+							))}
+						</ul>
+					</div>
+					<footer className="w-full h-[10%] bg-pri-100 rounded-bl-lg rounded-br-lg flex flex-row justify-around items-center">
+						<buttom className="mx-2 p-2 grid place-content-center bg-pri-200 rounded-full text-pri hover:text-sec hover:bg-pri duration-150 cursor-pointer">
+							<AttachFileOutlinedIcon className="w-6 h-6 rotate-45" />
+						</buttom>
+						<form onSubmit={handleSubmit} className="w-[90%] flex flex-row justify-center items-center">
+							<input
+								type="text"
+								name="message"
+								value={message.message}
+								onChange={handleChange}
+								className="w-[100%] px-4 py-2 text-sec bg-pri-200 rounded-lg focus:outline-none focus:bg-pri"
+							/>
+						</form>
+						<buttom
+							onClick={handleSubmit}
+							className="mx-2 p-2 grid place-content-center bg-pri-200 rounded-full text-pri hover:text-sec hover:bg-pri duration-150 cursor-pointer">
+							<SendIcon className="w-6 h-6" />
+						</buttom>
+					</footer>
+				</article>
+			</section>
+		</main>
+	);
 };
 export default ChatUi;

@@ -1,12 +1,12 @@
 import {createApi, fetchBaseQuery} from "@reduxjs/toolkit/query/react";
 
-export const loginDB = createApi({
-  reducerPath: "loginDB",
+export const createChatDB = createApi({
+  reducerPath: "createChatDB",
   baseQuery: fetchBaseQuery({
-    baseUrl: "https://dev.api.app.huntek.com/api/v1/auth/login",
+    baseUrl: "https://dev.api.app.huntek.com/api/v1/chats/create-chat",
   }),
   endpoints: (builder) => ({
-    postLogin: builder.mutation({
+    createChat: builder.mutation({
       query: (data) => ({
         method: "POST",
         body: data,
@@ -15,4 +15,4 @@ export const loginDB = createApi({
   }),
 });
 
-export const {usePostLoginMutation} = loginDB;
+export const {useCreateChatMutation} = createChatDB;
