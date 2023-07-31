@@ -1,18 +1,24 @@
 import { configureStore, getDefaultMiddleware } from "@reduxjs/toolkit";
 import { setupListeners } from "@reduxjs/toolkit/dist/query";
 import emailReducer from "./features/emailSlice";
-import { registerDB } from "./services/useRegister";
-import { verifDB } from "./services/useVerifCode";
-import { loginDB } from "./services/useLogin";
-import { recoverDB } from "./services/useRecoverPw";
-import { resendCodeDB } from "./services/useResendCode";
-import { newPasswordDB } from "./services/useNewPassword";
-import { chatsDB } from "./services/useChats";
-import { createChatDB } from "./services/useCreateChat";
-import { messagesDB } from "./services/useMessages";
-import { postMessagesDB } from "./services/usePostMessage";
-import { interviewsDB } from "./services/useInterviews";
-import { infoUserDB } from "./services/useInfoUser";
+import { registerDB } from "./services/log-reg-val/useRegister";
+import { verifDB } from "./services/log-reg-val/useVerifCode";
+import { loginDB } from "./services/log-reg-val/useLogin";
+import { recoverDB } from "./services/reco-pw/useRecoverPw";
+import { resendCodeDB } from "./services/log-reg-val/useResendCode";
+import { newPasswordDB } from "./services/reco-pw/useNewPassword";
+import { chatsDB } from "./services/chats-msg/useChats";
+import { createChatDB } from "./services/chats-msg/useCreateChat";
+import { messagesDB } from "./services/chats-msg/useMessages";
+import { postMessagesDB } from "./services/chats-msg/usePostMessage";
+import { interviewsDB } from "./services/user-info/useInterviews";
+import { infoUserDB } from "./services/user-info/useInfoUser";
+import { newFilesDB } from "./services/user-files/useNewFiles";
+import { filesUserDB } from "./services/user-files/useFiles";
+import { deleteFilesDB } from "./services/user-files/useDeleteFiles";
+import { editFilesDB } from "./services/user-files/useEditFiles";
+import { resumeDB } from "./services/user-profile/useResume";
+import { infoResumeDB } from "./services/user-profile/useGetResume";
 
 export const store = configureStore({
   reducer: {
@@ -29,6 +35,12 @@ export const store = configureStore({
     [postMessagesDB.reducerPath]: postMessagesDB.reducer,
     [interviewsDB.reducerPath]: interviewsDB.reducer,
     [infoUserDB.reducerPath]: infoUserDB.reducer,
+    [newFilesDB.reducerPath]: newFilesDB.reducer,
+    [filesUserDB.reducerPath]: filesUserDB.reducer,
+    [deleteFilesDB.reducerPath]: deleteFilesDB.reducer,
+    [editFilesDB.reducerPath]: editFilesDB.reducer,
+    [resumeDB.reducerPath]: resumeDB.reducer,
+    [infoResumeDB.reducerPath]: infoResumeDB.reducer
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware().concat([
@@ -44,6 +56,12 @@ export const store = configureStore({
       postMessagesDB.middleware,
       interviewsDB.middleware,
       infoUserDB.middleware,
+      newFilesDB.middleware,
+      filesUserDB.middleware,
+      deleteFilesDB.middleware,
+      editFilesDB.middleware,
+      resumeDB.middleware,
+      infoResumeDB.middleware
     ]),
 });
 setupListeners(store.dispatch);

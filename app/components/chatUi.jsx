@@ -4,8 +4,8 @@ import Image from "next/image";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import getCookie from "../helpers/getCookies";
-import { usePostMessageMutation } from "../globalstore/services/usePostMessage";
-import { useGetMessagesMutation } from "../globalstore/services/useMessages";
+import { usePostMessageMutation } from "../globalstore/services/chats-msg/usePostMessage";
+import { useGetMessagesMutation } from "../globalstore/services/chats-msg/useMessages";
 import SendIcon from "@mui/icons-material/Send";
 import ArrowBackOutlinedIcon from "@mui/icons-material/ArrowBackOutlined";
 import AttachFileOutlinedIcon from "@mui/icons-material/AttachFileOutlined";
@@ -111,8 +111,8 @@ const ChatUi = () => {
 		<main className="w-full h-screen text-pri flex flex-col justify-between items-center">
 			<nav className="w-full h-[10%] bg-sec flex flex-row justify-start items-center">
 				<Link
-					href="/conversations"
-					className="mx-4 p-1 grid place-content-center rounded-full text-pri hover:bg-pri-200 hover:scale-110 duration-150 ">
+					href="/messages"
+					className="mx-4 p-1 grid place-content-center rounded-full text-pri hover:bg-pri-200 hover:scale-110 duration-150">
 					<ArrowBackOutlinedIcon className="w-6 h-6" />
 				</Link>
 				<article className="w-[90%] flex flex-row justify-start items-center">

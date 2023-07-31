@@ -1,54 +1,36 @@
+"use client";
+import { useState } from "react";
+import Premium from "./premuim";
+import Advance from "./advance";
+
 const PlanSelector = () => {
+	const [selectedPlan, setSelectedPlan] = useState(null);
+
+	const handleSelectedPlan = (plan) => {
+		setSelectedPlan(plan);
+	};
+
 	return (
-		<section className="w-full h-screen flex flex-col justify-between items-center">
+		<section className="w-full h-screen flex flex-col justify-evenly items-center">
 			<article className="bg-pri w-11/12 h-1/6 rounded-lg flex flex-col justify-center items-center">
 				<h2 className="text-2xl text-center text-sec">Selecciona tu plan ideal</h2>
 				<p className="text-lg text-center text-sec font-semibold underline">ve al siguiente nivel</p>
 			</article>
-			<article className="w-11/12 h-4/6 flex flex-row justify-between items-start">
-				<div className="bg-pri-500 w-5/12 h-1/4 rounded-lg hover:bg-pri-400">
-					<label htmlFor="modalAdvance" className="text-lg font-light cursor-pointer w-full flex flex-col justify-evenly">
-						<h2 className="text-2xl text-center text-sec">Advance</h2>
-						<p className="text-lg text-center text-sec">$199mxn</p>
-					</label>
-					<input type="checkbox" id="modalAdvance" className="modal-toggle" />
-					<div className="modal">
-						<div className="modal-box">
-							Donde estudiaste titan?
-							<div className="modal-action">
-								<label htmlFor="modalAdvance" className="btn">
-									Cerrar
-								</label>
-							</div>
-						</div>
-					</div>
-				</div>
-
-				<div className="bg-pri-700 w-5/12 h-1/4 rounded-lg hover:bg-pri-600">
-					<label htmlFor="modalAdvance" className="text-lg font-light cursor-pointer w-full flex flex-col justify-evenly">
-						<h2 className="text-2xl text-center text-sec">Premium</h2>
-						<p className="text-lg text-center text-sec">$299mxn</p>
-					</label>
-					<input type="checkbox" id="modalAdvance" className="modal-toggle" />
-					<div className="modal">
-						<div className="modal-box">
-							<div className="bg-pri-700 w-5/12 h-1/4 rounded-lg">
-							<h2 className="text-2xl text-center text-sec">Advance</h2>
-							</div>
-							<div className="modal-action">
-								<label htmlFor="modalAdvance" className="btn">
-									Cerrar
-								</label>
-							</div>
-						</div>
-					</div>
+			<article className="w-11/12 h-1/5 flex flex-row justify-between items-start">
+			<Advance handleSelectedPlan={handleSelectedPlan}/>	
+			<Premium handleSelectedPlan={handleSelectedPlan}/>
+			</article>
+			<article>
+				<div className="flex flex-col">
+					<h2 className="text-2xl font-semibold text-center text-pri">Plan seleccionado</h2>
+					<p className="px-6 text-md text-center text-pri">{selectedPlan === null ? `No ha seleccionado ningún plan` : selectedPlan}</p>
 				</div>
 			</article>
 			<article className="h-[10px] pb-8">
-				<p className="text-lg text-center text-pri-700 font-semibold underline">Continuar sin plan</p>
+				<button className="text-lg text-center text-pri-700 font-semibold underline">{selectedPlan === null ? `Continuar sin plan` : `Continuar con el pago`}</button>
 			</article>
 		</section>
-	);
+	); 
 };
 
 export default PlanSelector;

@@ -11,8 +11,6 @@ import Profile from "./profile";
 
 const NavBar = () => {
 	const [user, setUser] = useState({
-		name: "Luis Sanchez",
-		email: "louissaintchess@gmail.com",
 		image: "/images/pexels-monstera-5384445.jpg",
 		notification: [
 			{
@@ -66,7 +64,7 @@ const NavBar = () => {
 								className="rounded-full object-cover absolute"
 							/>
 						</label>
-						<div className="drawer-side z-10">
+						<div className="drawer-side z-50">
 							<ul className="w-full h-screen bg-sec">
 								<Profile user={user} closeProfile={closeProfile} setCloseProfile={setCloseProfile} />
 							</ul>
@@ -90,7 +88,7 @@ const NavBar = () => {
 			<article className="navbar-end">
 				<div className="w-[75px] flex flex-row justify-between items-center">
 					<Link
-						href="/conversations"
+						href="/messages"
 						className="p-1 grid place-content-center rounded-full hover:bg-pri-100 hover:scale-125 duration-200">
 						<ForumOutlinedIcon className="w-6 h-6 text-sec hover:text-pri" />
 					</Link>
@@ -103,7 +101,7 @@ const NavBar = () => {
 								<NotificationsNoneOutlinedIcon className="w-6 h-6 text-sec hover:text-pri" />
 							</label>
 						</div>
-						<div className="drawer-side z-10">
+						<div className="drawer-side z-50">
 							<ul className="w-full h-screen bg-sec">
 								<li>
 									<Notification user={user} closeNotif={closeNotif} setCloseNotif={setCloseNotif} />

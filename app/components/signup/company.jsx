@@ -1,19 +1,19 @@
 "use client";
 import Link from "next/link";
 import Image from "next/image";
-import {useState} from "react";
-import {usePostUsersMutation} from "../../globalstore/services/useRegister";
-import {useRouter} from "next/navigation";
-import {setEmail} from "../../globalstore/features/emailSlice";
-import {useDispatch} from "react-redux";
+import { useState } from "react";
+import { usePostUsersMutation } from "../../globalstore/services/log-reg-val/useRegister";
+import { useRouter } from "next/navigation";
+import { setEmail } from "../../globalstore/features/emailSlice";
+import { useDispatch } from "react-redux";
 import verifySignupInputs from "../../helpers/verifySignUpInputs";
-import {AlertError} from "../alertsforrequest";
+import { AlertError } from "../alertsforrequest";
 
 const CompanyForm = () => {
 	const [showPassword, setShowPassword] = useState(false);
 	const [errorCatched, setErrorCatched] = useState(null);
 	const [check, setCheck] = useState(false);
-	const [postUsers, {isLoading}] = usePostUsersMutation();
+	const [postUsers, { isLoading }] = usePostUsersMutation();
 	const dispatch = useDispatch();
 	const router = useRouter();
 	const [input, setInput] = useState({
@@ -57,7 +57,7 @@ const CompanyForm = () => {
 				password: "",
 				role_name: "company",
 			});
-			router.push("/verifymail");
+			router.push("/emailvalidate");
 		} catch (error) {
 			if (error.status === "FETCH_ERROR")
 				return setErrorCatched("No se ha podido establecer conexión con el servidor.");
@@ -88,7 +88,7 @@ const CompanyForm = () => {
 						name="email"
 						id="email"
 						value={input.email}
-						className="w-full px-3 bg-transparent outline-none border-b"
+						className="w-full px-3 bg-transparent outline-none border-b rounded-none"
 						placeholder="Tu email"
 						onChange={handleChange}
 						autoComplete="off"
@@ -97,27 +97,15 @@ const CompanyForm = () => {
 				<label htmlFor="password">
 					Contraseña
 					<div className="relative">
-						{showPassword ? (
 							<input
-								type="text"
+								type={showPassword ? "text" : "password"}
 								name="password"
 								id="password"
 								value={input.password}
-								className="w-full px-3 bg-transparent outline-none border-b"
+								className="w-full px-3 bg-transparent outline-none border-b rounded-none"
 								placeholder="Tu contraseña"
 								onChange={handleChange}
 							/>
-						) : (
-							<input
-								type="password"
-								name="password"
-								id="password"
-								value={input.password}
-								className="w-full px-3 bg-transparent outline-none border-b"
-								placeholder="Tu contraseña"
-								onChange={handleChange}
-							/>
-						)}
 						<button onClick={handleShowPassword} className="absolute inset-y-0 end-0 grid place-content-center px-4">
 							{showPassword ? (
 								<Image
