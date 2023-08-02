@@ -1,10 +1,13 @@
 "use client";
-import { useState } from "react";
+import Link from "next/link";
 import Image from "next/image";
+import { useState } from "react";
 import { useGetInfoUserQuery } from "@/app/globalstore/services/user-info/useInfoUser";
 import CloudUploadOutlinedIcon from "@mui/icons-material/CloudUploadOutlined";
 import DriveFolderUploadOutlinedIcon from "@mui/icons-material/DriveFolderUploadOutlined";
-
+import { usePostNewFilesMutation } from "@/app/globalstore/services/user-files/useNewFiles";
+import { usePostResumeMutation } from "@/app/globalstore/services/user-profile/useResume";
+import { useGetFilesQuery } from "@/app/globalstore/services/user-files/useFiles";
 import Genres from "../formApplicant/genres";
 import Country from "../formApplicant/country";
 import OptionsCity from "../formApplicant/optionsCity";
@@ -21,27 +24,59 @@ import Experience from "../formApplicant/yearsOfExperience";
 import Income from "../formApplicant/income";
 import FormOfWork from "../formApplicant/formOfWork";
 import Availability from "../formApplicant/availability";
-import { useParams, usePathname, useSearchParams } from "next/navigation";
+import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
 
 const ApplicantConfig = () => {
-	const [needData, setNeedData] = useState({
-		cv: "",
-		profile_picture: "",
-	});
+	const [postResume] = usePostResumeMutation();
+	const [postNewFiles] = usePostNewFilesMutation();
+	const [cvFile, setCvFile] = useState(null);
+	const [profilePictureFile, setProfilePictureFile] = useState(null);
+	const { data: userInfo, isLoading } = useGetInfoUserQuery();
+	const firstName = userInfo?.first_name.split(" ")[0];
+	const lastName = userInfo?.last_name.split(" ")[0];
+	const { data: filesInfo, refetch } = useGetFilesQuery(userInfo?.id);
+	const handleCvChange = (event) => {
+		setCvFile(event.target.files[0]);
+	};
+	const handleProfilePictureChange = (event) => {
+		setProfilePictureFile(event.target.files[0]);
+	};
+	const handleUpload = async () => {
+		const formData = new FormData();
+		formData.append("cv", cvFile);
+		formData.append("profile_picture", profilePictureFile);
+		try {
+			const response = await postNewFiles({ user_id: userInfo?.id, data: formData }).unwrap();
+			console.log("Files uploaded successfully!");
+			refetch();
+		} catch (error) {
+			console.error("Error uploading files:", error);
+		}
+	};
 
 	const [userData, setUserData] = useState({
+		mail: userInfo?.email,
+
 		phone: "",
 		birthdate: "",
 		genre: "",
 		country: "",
 
-		city: "",
 		studies: "",
 		university: "",
-		profession: [],
+		degree: "",
 
+		city: "",
 		languages: [],
 		hobbies: [],
+
+		reubication: "",
+		profession: [],
+		years_xp: "",
+
+		income: "",
+		availability: "",
+		form_of_work: "",
 	});
 
 	const handleChange = (event) => {
@@ -50,6 +85,14 @@ const ApplicantConfig = () => {
 			...userData,
 			[event.target.name]: event.target.value,
 		});
+	};
+	const handleSubmit = async (event) => {
+		event.preventDefault();
+		try {
+			const response = await postResume(userData).unwrap();
+		} catch (error) {
+			//ERROR
+		}
 	};
 
 	const [currentQuestion, setCurrentQuestion] = useState("Q1");
@@ -90,10 +133,6 @@ const ApplicantConfig = () => {
 		}
 	};
 
-	const { data, isLoading } = useGetInfoUserQuery();
-	const firstName = data?.first_name.split(" ")[0];
-	const lastName = data?.last_name.split(" ")[0];
-
 	if (isLoading) {
 		return (
 			<div className="container">
@@ -103,8 +142,8 @@ const ApplicantConfig = () => {
 	}
 
 	return (
-		<section className="w-full h-screen text-sec text-center flex flex-col justify-between items-center">
-			<article className="w-full h-[30%] flex flex-col justify-evenly items-center">
+		<section className="w-full h-screen text-sec text-center flex flex-col md:flex-row justify-between items-center">
+			<article className="w-full h-[30%] md:h-[70%] flex flex-col justify-evenly items-center">
 				<div className="w-full h-full bg-HKlogo bg-contain bg-center bg-no-repeat"></div>
 				<div>
 					<h1 className="text-xl sm:text-2xl">
@@ -113,41 +152,50 @@ const ApplicantConfig = () => {
 					<h2 className="text-lg sm:text-xl text-pri-500">Gracias por unirte a Huntek!</h2>
 				</div>
 			</article>
-			<article className="w-11/12 h-[65%] flex flex-col justify-evenly items-center">
+			<article className="w-11/12 h-[65%] md:h-[90%] flex flex-col justify-evenly items-center">
 				<h2 className="w-full h-[5%] text-base sm:text-lg">Completa tu perfil para comenzar</h2>
-				<main className="w-full max-w-md h-[80%] carousel rounded-box text-pri bg-pri-100 border-2 hidd">
+				<main className="w-full max-w-md h-[80%] carousel rounded-box text-pri bg-sec border-2 hidd">
 					<section
 						id="Q1"
 						style={{ display: currentQuestion === "Q1" ? "inherit" : "none" }}
-						className="carousel-item w-full h-full bg-pri-100 rounded-box flex flex-col justify-evenly items-center ">
+						className="carousel-item w-full h-full rounded-box flex flex-col justify-evenly items-center ">
 						<p className="text-xl font-medium">Información Importante</p>
 						<div className="w-full flex flex-col justify-around items-center">
 							<div className="w-32 h-32 border-4 border-pri rounded-full relative">
 								<Image
-									src={needData.profile_picture === "" ? "/images/defaultPhoto.png" : `${needData.profile_picture}`}
+									src={
+										filesInfo === undefined || filesInfo[1]?.url === undefined
+											? "/images/defaultPhoto.png"
+											: `${filesInfo[1].url}`
+									}
 									alt="profileImg"
 									fill={true}
 									className="rounded-full object-cover absolute"
 								/>
-								<label className="w-8 h-8 bg-pri text-sec rounded-full grid place-content-center absolute left-[87px] top-[87px] cursor-pointer hover:bg-sec hover:text-pri">
+								<label className="w-8 h-8 bg-pri text-sec rounded-full shadow-lg grid place-content-center absolute left-[87px] top-[87px] cursor-pointer hover:bg-sec hover:text-pri">
 									<CloudUploadOutlinedIcon />
-									<input type="file" class="hidden" />
+									<input type="file" className="hidden" onChange={handleProfilePictureChange} />
 								</label>
 							</div>
-							<label class="text-lg font-medium" htmlFor="file_input">
+							<label className="text-lg font-medium" htmlFor="file_input">
 								Foto de Perfil
 							</label>
 						</div>
 						<div className="h-1/4 flex flex-col justify-evenly items-center">
-							<label class="w-fit h-16 px-4 flex flex-col justify-center items-center bg-sec text-pri rounded-lg shadow-lg cursor-pointer hover:bg-pri hover:text-sec">
+							<label className="w-fit h-16 px-4 flex flex-col justify-center items-center bg-pri text-sec rounded-lg shadow-lg cursor-pointer hover:bg-sec hover:text-pri">
 								<DriveFolderUploadOutlinedIcon />
 								<span>Seleccionar Archivo</span>
-								<input type="file" class="hidden" />
+								<input type="file" className="hidden" onChange={handleCvChange} />
 							</label>
-							<label class="text-lg font-medium" htmlFor="file_input">
+							<label className="text-lg font-medium" htmlFor="file_input">
 								Curriculum
 							</label>
 						</div>
+						<button
+							onClick={handleUpload}
+							className="w-fit px-2 py-1 bg-pri text-sec rounded-lg shadow-lg hover:bg-pri-100 hover:text-pri">
+							Upload
+						</button>
 					</section>
 					<section
 						id="Q2"
@@ -228,15 +276,17 @@ const ApplicantConfig = () => {
 						</article>
 					</section>
 				</main>
-				<div className="w-52 h-[5%] flex flex-row justify-between items-center">
-					<button className="w-6 h-6 bg-pri-100 text-pri rounded-full" onClick={prevQ}>
-						{"<"}
-					</button>
+				<div className="h-[5%] gap-2 flex flex-row justify-between items-center">
+					{currentQuestion !== "Q1" && (
+						<button className="w-6 h-6 bg-pri-100 text-pri rounded-full hover:bg-pri-400" onClick={prevQ}>
+							{"<"}
+						</button>
+					)}
 					<a
 						href="#Q1"
 						onClick={() => setCurrentQuestion("Q1")}
 						className={`w-6 h-6 ${
-							currentQuestion === "Q1" ? "bg-pri text-pri-100" : "bg-pri-100 text-pri"
+							currentQuestion === "Q1" ? "bg-pri text-pri-100" : "bg-pri-100 text-pri hover:bg-pri-400"
 						} rounded-full`}>
 						1
 					</a>
@@ -244,7 +294,7 @@ const ApplicantConfig = () => {
 						href="#Q2"
 						onClick={() => setCurrentQuestion("Q2")}
 						className={`w-6 h-6 ${
-							currentQuestion === "Q2" ? "bg-pri text-pri-100" : "bg-pri-100 text-pri"
+							currentQuestion === "Q2" ? "bg-pri text-pri-100" : "bg-pri-100 text-pri hover:bg-pri-400"
 						} rounded-full`}>
 						2
 					</a>
@@ -252,7 +302,7 @@ const ApplicantConfig = () => {
 						href="#Q3"
 						onClick={() => setCurrentQuestion("Q3")}
 						className={`w-6 h-6 ${
-							currentQuestion === "Q3" ? "bg-pri text-pri-100" : "bg-pri-100 text-pri"
+							currentQuestion === "Q3" ? "bg-pri text-pri-100" : "bg-pri-100 text-pri hover:bg-pri-400"
 						} rounded-full`}>
 						3
 					</a>
@@ -260,7 +310,7 @@ const ApplicantConfig = () => {
 						href="#Q4"
 						onClick={() => setCurrentQuestion("Q4")}
 						className={`w-6 h-6 ${
-							currentQuestion === "Q4" ? "bg-pri text-pri-100" : "bg-pri-100 text-pri"
+							currentQuestion === "Q4" ? "bg-pri text-pri-100" : "bg-pri-100 text-pri hover:bg-pri-400"
 						} rounded-full`}>
 						4
 					</a>
@@ -268,7 +318,7 @@ const ApplicantConfig = () => {
 						href="#Q5"
 						onClick={() => setCurrentQuestion("Q5")}
 						className={`w-6 h-6 ${
-							currentQuestion === "Q5" ? "bg-pri text-pri-100" : "bg-pri-100 text-pri"
+							currentQuestion === "Q5" ? "bg-pri text-pri-100" : "bg-pri-100 text-pri hover:bg-pri-400"
 						} rounded-full`}>
 						5
 					</a>
@@ -276,13 +326,24 @@ const ApplicantConfig = () => {
 						href="#Q6"
 						onClick={() => setCurrentQuestion("Q6")}
 						className={`w-6 h-6 ${
-							currentQuestion === "Q6" ? "bg-pri text-pri-100" : "bg-pri-100 text-pri"
+							currentQuestion === "Q6" ? "bg-pri text-pri-100" : "bg-pri-100 text-pri hover:bg-pri-400"
 						} rounded-full`}>
 						6
 					</a>
-					<button className="w-6 h-6 bg-pri-100 text-pri rounded-full" onClick={nextQ}>
-						{">"}
-					</button>
+					{currentQuestion !== "Q6" ? (
+						<div className="gap-2 flex flex-row">
+							<button className="w-6 h-6 bg-pri-100 text-pri rounded-full hover:bg-pri-400" onClick={nextQ}>
+								{">"}
+							</button>
+							<Link href="/home" className="w-6 h-6 bg-pri-100 text-pri rounded-full hover:bg-pri-400">
+								<HomeOutlinedIcon className="w-6 h-6" />
+							</Link>
+						</div>
+					) : (
+						<Link href="/home" className="w-6 h-6 bg-pri-100 text-pri rounded-full hover:bg-pri-400">
+							<HomeOutlinedIcon className="w-6 h-6" />
+						</Link>
+					)}
 				</div>
 			</article>
 		</section>
