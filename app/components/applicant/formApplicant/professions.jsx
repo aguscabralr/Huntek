@@ -76,7 +76,7 @@ const Profession = ({ userData, handleChange, inputProf }) => {
 		setSelectedOption(selectedOption);
 	};
 
-	const pathname = usePathname()
+	const pathname = usePathname();
 
 	return (
 		<div>
@@ -105,11 +105,15 @@ const Profession = ({ userData, handleChange, inputProf }) => {
 				onChange={handleSelectChange}
 				styles={customStyles}
 			/>
-			{!pathname.includes("userconfig") && userData.profession ? userData.profession.map((profession) => {
-				return (
-					<div className="mt-1 ml-1 text-gray-500/80 text-base">{profession}</div>
-				)
-			}): ""}
+			{!pathname.includes("userconfig") && userData.profession
+				? userData.profession.map((profession, index) => {
+						return (
+							<div key={index} className="mt-1 ml-1 text-gray-500/80 text-base">
+								{profession}
+							</div>
+						);
+				  })
+				: ""}
 		</div>
 	);
 };

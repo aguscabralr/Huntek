@@ -71,7 +71,7 @@ const Hobbies = ({ userData, handleChange, inputHobbies }) => {
 		setSelectedOption(selectedOption);
 	};
 
-	const pathname = usePathname()
+	const pathname = usePathname();
 
 	return (
 		<div>
@@ -100,11 +100,15 @@ const Hobbies = ({ userData, handleChange, inputHobbies }) => {
 				onChange={handleSelectChange}
 				styles={customStyles}
 			/>
-			{!pathname.includes("userconfig") && userData.hobbies ? userData.hobbies.map((hobbie) => {
-				return (
-					<div className="mt-1 ml-1 text-gray-500/80 text-base">{hobbie}</div>
-				)
-			}): ""}
+			{!pathname.includes("userconfig") && userData.hobbies
+				? userData.hobbies.map((hobbie, index) => {
+						return (
+							<div key={index} className="mt-1 ml-1 text-gray-500/80 text-base">
+								{hobbie}
+							</div>
+						);
+				  })
+				: ""}
 		</div>
 	);
 };

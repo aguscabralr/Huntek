@@ -123,8 +123,8 @@ const Languages = ({ userData, handleChange, inputLanguages }) => {
 		});
 	};
 
-	const pathname = usePathname()
-	
+	const pathname = usePathname();
+
 	return (
 		<div>
 			<label htmlFor="languagess" className="ml-2 font-semibold">
@@ -152,11 +152,15 @@ const Languages = ({ userData, handleChange, inputLanguages }) => {
 				onChange={handleSelectChange}
 				styles={customStyles}
 			/>
-			{!pathname.includes("userconfig") && userData.languages ? userData.languages.map((lang) => {
-				return (
-					<div className="mt-1 ml-1 text-gray-500/80 text-base">{lang.split(":")[0]} {lang.split(":")[1]}</div>
-				)
-			}): ""}
+			{!pathname.includes("userconfig") && userData.languages
+				? userData.languages.map((lang, index) => {
+						return (
+							<div key={index} className="mt-1 ml-1 text-gray-500/80 text-base">
+								{lang.split(":")[0]} {lang.split(":")[1]}
+							</div>
+						);
+				  })
+				: ""}
 			{lang.length ? (
 				<div className="w-full max-h-[80px] px-4 bg-pri-100 carousel-vertical">
 					{lang.map(({ language, rating }, index) => (
