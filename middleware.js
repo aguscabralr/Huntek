@@ -5,7 +5,7 @@ export async function middleware(request) {
   const jwt = request.cookies.get("kTnKETkt");
   const response = NextResponse.next();
 
-  const protectedPaths = ["/home", "/swipe", "/profileExtend", "/postulations", "/messages", "/interviews", "/subscriptions"];
+  const protectedPaths = ["/applicant/home", "/applicant/swipe", "/applicant/profileExtend", "/applicant/postulations", "/applicant/messages", "/applicant/interviews", "/applicant/subscriptions", "/applicant/userconfig"];
   if (protectedPaths.some((path) => request.nextUrl.pathname.startsWith(path))) {
     if (jwt?.value === undefined) {
       return NextResponse.redirect(new URL("/login", request.url));
@@ -38,7 +38,7 @@ export async function middleware(request) {
           new TextEncoder().encode("DSxSz^r#r@6u^ZFkipmgySATzypg@&MMyuW@Kigp")
         );
         if (payload.user_info) {
-          return NextResponse.redirect(new URL("/home", request.url));
+          return NextResponse.redirect(new URL("/applicant/home", request.url));
         }
       } catch (error) {
         // Nada.

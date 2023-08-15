@@ -2,7 +2,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
-import { usePostLoginMutation } from "../globalstore/services/log-reg-val/useLogin";
+import { usePostLoginMutation } from "../globalstore/services/both/log-reg-val/useLogin";
 import { useRouter } from "next/navigation";
 import { AlertError } from "./alertsforrequest";
 import CheckBoxOutlineBlankOutlinedIcon from "@mui/icons-material/CheckBoxOutlineBlankOutlined";
@@ -38,7 +38,6 @@ const LogForm = () => {
 	};
 
 	const handleShowPassword = (event) => {
-		console.log(event.keyCode);
 		setShowPassword(!showPassword);
 	};
 
@@ -59,7 +58,7 @@ const LogForm = () => {
 			const date = new Date();
 			date.setDate(date.getDate() + 7);
 			document.cookie = `kTnKETkt=${token}; expires=${date.toUTCString()}`;
-			router.push("/userconfig");
+			router.push("/applicant/home");
 		} catch (error) {
 			if (error.status === "FETCH_ERROR")
 				return setErrorCatched("No se ha podido establecer conexión con el servidor.");
