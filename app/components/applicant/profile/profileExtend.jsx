@@ -21,7 +21,7 @@ import TranslateIcon from "@mui/icons-material/Translate";
 import FlagIcon from "@mui/icons-material/Flag";
 import University from "../formApplicant/university";
 import Career from "../formApplicant/career";
-import OptionsCity from "../formApplicant/optionsCity";
+import City from "../formApplicant/city";
 import Genres from "../formApplicant/genres";
 import Phone from "../formApplicant/phone";
 import Birthdate from "../formApplicant/birthdate";
@@ -39,155 +39,99 @@ import Academic from "../formApplicant/academic";
 import { useGetInfoUserQuery } from "../../../globalstore/services/applicant/user-info/useInfoUser";
 import { useGetResumeQuery } from "@/app/globalstore/services/applicant/user-profile/useGetResume";
 import { useGetFilesQuery } from "@/app/globalstore/services/applicant/user-files/useFiles";
+import { usePutResumeMutation } from "@/app/globalstore/services/applicant/user-profile/useEditResume";
+
 const ProfileExt = () => {
 	const { data, isLoading } = useGetInfoUserQuery();
-  const { data: filesInfo } = useGetFilesQuery(data?.id);
+	const { data: filesInfo } = useGetFilesQuery(data?.id);
+	const [putResume, { isSuccess }] = usePutResumeMutation();
 
 	const { data: resumeInfo } = useGetResumeQuery();
-  let initialResumeJson = {};
+	let initialResumeJson = {};
 
-  if (resumeInfo && resumeInfo.resume) {
-    initialResumeJson = JSON.parse(resumeInfo.resume);
-  }
+	if (resumeInfo && resumeInfo.resume) {
+		initialResumeJson = JSON.parse(resumeInfo.resume);
+	}
 
-  const [userData, setUserData] = useState({
-    mail: "",
-    phone: "",
-    genre: "",
-    birthdate: "",
+	const [userData, setUserData] = useState({
+		mail: "",
+		phone: "",
+		genre: "",
+		birthdate: "",
 		country: "",
 		academic: "",
-    university: "",
+		university: "",
 		city: "",
-    reubication: "",
-    languages: "",
-    profession: "",
-    career: "",
-    hobbies: "",
-    years_xp: "",
-    income: "",
-    form_of_work: "",
-    availability: "",
-  });
+		reubication: "",
+		languages: "",
+		profession: "",
+		career: "",
+		hobbies: "",
+		years_xp: "",
+		income: "",
+		form_of_work: "",
+		availability: "",
+	});
 
-  useEffect(() => {
-    if (resumeInfo && resumeInfo.resume) {
-      const resumeJson = JSON.parse(resumeInfo.resume);
-      setUserData({
-        mail: resumeJson.mail || "",
-        phone: resumeJson.phone || "",
-        genre: resumeJson.genre || "",
-        birthdate: resumeJson.birthdate || "",
+	useEffect(() => {
+		if (resumeInfo && resumeInfo.resume) {
+			const resumeJson = JSON.parse(resumeInfo.resume);
+			setUserData({
+				mail: resumeJson.mail || "",
+				phone: resumeJson.phone || "",
+				genre: resumeJson.genre || "",
+				birthdate: resumeJson.birthdate || "",
 				country: resumeJson.country || "",
 				academic: resumeJson.academic || "",
-        university: resumeJson.university || "",
-        city: resumeJson.city || "",
-        reubication: resumeJson.reubication || "",
-        languages: resumeJson.languages || "",
-        profession: resumeJson.profession || "",
-        career: resumeJson.career || "",
-        hobbies: resumeJson.hobbies || "",
-        years_xp: resumeJson.years_xp || "",
-        income: resumeJson.income || "",
-        form_of_work: resumeJson.form_of_work || "",
-        availability: resumeJson.availability || "",
-      });
-    }
-  }, [resumeInfo]);
-
-console.log("USERDATA", userData)
-console.log("RESUMEJSON", initialResumeJson);
+				university: resumeJson.university || "",
+				city: resumeJson.city || "",
+				reubication: resumeJson.reubication || "",
+				languages: resumeJson.languages || "",
+				profession: resumeJson.profession || "",
+				career: resumeJson.career || "",
+				hobbies: resumeJson.hobbies || "",
+				years_xp: resumeJson.years_xp || "",
+				income: resumeJson.income || "",
+				form_of_work: resumeJson.form_of_work || "",
+				availability: resumeJson.availability || "",
+			});
+		}
+	}, [resumeInfo]);
 
 	const [inputPhotoUpload, setInputPhotoUpload] = useState(false);
 	const handleInputPhotoUpload = () => {
 		setInputPhotoUpload(!inputPhotoUpload);
 	};
-	
-	const [inputUniversity, setInputUniversity] = useState(false);
-	const handleInputUniversity = () => {
-		setInputUniversity(!inputUniversity);
-	};
 
-	const [inputCareer, setInputCareer] = useState(false);
-	const handleInputCareer = () => {
-		setInputCareer(!inputCareer);
-	};
+	const [allow, setAllow] = useState(false);
+	const [open, setOpen] = useState(false);
 
-	const [inputCity, setInputCity] = useState(false);
-	const handleInputCity = () => {
-		setInputCity(!inputCity);
-	};
-
-	const [inputGenre, setInputGenre] = useState(false);
-	const handleInputGenre = () => {
-		setInputGenre(!inputGenre);
-	};
-
-	const [inputPhone, setInputPhone] = useState(false);
-	const handleInputPhone = () => {
-		setInputPhone(!inputPhone);
-	};
-
-	const [inputBirthdate, setInputBirthdate] = useState(false);
-	const handleInputBirthdate = () => {
-		setInputBirthdate(!inputBirthdate);
-	};
-
-	const [inputReubication, setInputReubication] = useState(false);
-	const handleInputReubication = () => {
-		setInputReubication(!inputReubication);
-	};
-
-	const [inputProf, setInputProf] = useState(false);
-	const handleInputProf = () => {
-		setInputProf(!inputProf);
-	};
-
-	const [inputExperience, setInputExperience] = useState(false);
-	const handleInputExperience = () => {
-		setInputExperience(!inputExperience);
-	};
-
-	const [inputIncome, setInputIncome] = useState(false);
-	const handleInputIncome = () => {
-		setInputIncome(!inputIncome);
-	};
-
-	const [inputAvailability, setInputAvailability] = useState(false);
-	const handleInputAvailability = () => {
-		setInputAvailability(!inputAvailability);
-	};
-
-	const [inputFormOfWork, setInputFormOfWork] = useState(false);
-	const handleInputFormOfWork = () => {
-		setInputFormOfWork(!inputFormOfWork);
-	};
-
-	const [inputLanguages, setInputLanguages] = useState(false);
-	const handleInputLanguages = () => {
-		setInputLanguages(!inputLanguages);
-	};
-
-	const [inputHobbies, setInputHobbies] = useState(false);
-	const handleInputHobbies = () => {
-		setInputHobbies(!inputHobbies);
-	};
-
-	const [inputCountry, setInputCountry] = useState(false);
-	const handleInputCountry = () => {
-		setInputCountry(!inputCountry);
-	};
-
-	const [inputAcademic, setInputAcademic] = useState(false);
-	const handleInputAcademic = () => {
-		setInputAcademic(!inputAcademic);
-	};
+	const [newValue, setNewValue] = useState({
+		property_name: "",
+		new_value: "",
+	});
 
 	const handleChange = (event) => {
 		setUserData({
 			...userData,
 			[event.target.name]: event.target.value,
 		});
+		setNewValue({
+			...newValue,
+			new_value: event.target.value,
+		});
+	};
+
+	const [updated, setUpdated] = useState("");
+
+	const handlePut = async () => {
+		try {
+			const response = await putResume({ user_id: data?.id, data: newValue }).unwrap();
+			setUpdated("Actualización exitosa");
+			setAllow(false);
+		} catch (error) {
+			setUpdated("Error en la actualización");
+		}
 	};
 
 	const [active, setActive] = useState("p");
@@ -201,34 +145,33 @@ console.log("RESUMEJSON", initialResumeJson);
 	}
 
 	return (
-		<main className="w-full h-[90%] flex flex-col lg:flex-row justify-around items-center">
-			<section className="w-full lg:w-1/3 h-2/5 lg:h-5/6 flex flex-col justify-around items-center">
-				<article className="w-11/12 flex flex-col justify-center items-center">
-					<div></div>
-					<div className="w-36 h-36 border-4 border-pri rounded-full shadow-lg relative">
-					{filesInfo && filesInfo[0]?.profile_picture_url ? (
-                <Image
-                  src={filesInfo[0]?.profile_picture_url}
-                  alt="avatar"
-                  fill={true}
-                  loading={"lazy"}
-                  placeholder="empty"
-                  blurDataURL="/images/defaultPhoto.png"
-                  className="rounded-full object-cover absolute"
-                />
-              ) : (
-                <Image
-                src={"/images/defaultPhoto.png"}
-                alt="avatar"
-                fill={true}
-                loading={"eager"}
-                className="rounded-full object-contain absolute"
-                />
-              )}
+		<main className="w-full h-[90%] flex flex-col lg:flex-row justify-between items-center">
+			<section className="w-full lg:w-1/3 h-1/2 lg:h-5/6 flex flex-col justify-between lg:justify-around items-center">
+				<article className="w-11/12 flex flex-col justify-center items-center mt-3">
+					<div className="w-24 lg:w-36 h-24 lg:h-36 border-4 border-pri rounded-full shadow-lg relative">
+						{filesInfo && filesInfo[0]?.profile_picture_url ? (
+							<Image
+								src={filesInfo[0]?.profile_picture_url}
+								alt="avatar"
+								fill={true}
+								loading={"eager"}
+								placeholder="empty"
+								blurDataURL="/images/defaultPhoto.png"
+								className="rounded-full object-contain absolute"
+							/>
+						) : (
+							<Image
+								src={"/images/defaultPhoto.png"}
+								alt="avatar"
+								fill={true}
+								loading={"eager"}
+								className="rounded-full object-contain absolute"
+							/>
+						)}
 						<div className="flex justify-between items-center">
 							<label
 								htmlFor="modalPhotoUpload"
-								className="w-8 h-8 bg-pri text-sec rounded-full shadow-lg grid place-content-center absolute left-[100px] top-[100px] cursor-pointer hover:bg-sec hover:text-pri">
+								className="w-8 h-8 bg-pri text-sec rounded-full shadow-lg grid place-content-center absolute left-[60px] lg:left-[100px] top-[60px] lg:top-[100px] cursor-pointer hover:bg-sec hover:text-pri">
 								<CloudUploadOutlinedIcon />
 							</label>
 							<input type="checkbox" id="modalPhotoUpload" className="modal-toggle" />
@@ -249,39 +192,39 @@ console.log("RESUMEJSON", initialResumeJson);
 							</div>
 						</div>
 					</div>
-					<h2 className="my-2 text-2xl lg:text-3xl text-black text-center font-bold line-clamp-2">
+					<h2 className="mt-2 text-2xl lg:text-3xl text-black text-center font-bold line-clamp-2">
 						{data?.first_name} {data?.last_name}
 					</h2>
+					<p className="text-md text-gray-500">{`${userData.mail}`}</p>
 				</article>
 				<article className="flex flex-col justify-start items-center">
-					<h2 className="w-fit px-1 mx-1 py-1 text-2xl lg:text-2xl text-sec bg-pri rounded-md text-center">
+					<h2 className="w-fit px-1 mx-4 py-1 text-xl lg:text-2xl text-sec bg-pri rounded-md text-center">
 						{userData.career ? userData.career : "Datos incompletos"}
 					</h2>
-					<p className="text-md text-gray-500 mt-2">{`${userData.mail}`}</p>
 					<p className="text-sm text-gray-500 mt-2">{`Ubicación actual ${userData.city}`}</p>
 				</article>
+				<article className="w-full flex flex-row justify-center lg:hidden">
+					<a
+						href="#personal"
+						className={`w-fit px-2 py-1 ${
+							active === "p" ? "bg-pri text-sec" : "bg-pri-100 text-pri"
+						} rounded-tl-lg rounded-bl-lg`}
+						onClick={() => setActive("p")}>
+						Personal
+					</a>
+					<a
+						href="#laboral"
+						className={`w-fit px-2 py-1 ${
+							active === "l" ? "bg-pri text-sec" : "bg-pri-100 text-pri"
+						} rounded-tr-lg rounded-br-lg`}
+						onClick={() => setActive("l")}>
+						Laboral
+					</a>
+				</article>
 			</section>
-			<article className="w-full flex flex-row justify-center lg:hidden absolute top-[46%]">
-				<a
-					href="#personal"
-					className={`w-fit px-2 py-1 ${
-						active === "p" ? "bg-pri text-sec" : "bg-pri-100 text-pri"
-					} rounded-tl-lg rounded-bl-lg`}
-					onClick={() => setActive("p")}>
-					Personal
-				</a>
-				<a
-					href="#laboral"
-					className={`w-fit px-2 py-1 ${
-						active === "l" ? "bg-pri text-sec" : "bg-pri-100 text-pri"
-					} rounded-tr-lg rounded-br-lg`}
-					onClick={() => setActive("l")}>
-					Laboral
-				</a>
-			</article>
-			<section className="w-full lg:w-2/3 h-3/5 lg:h-5/6 text-pri text-lg font-light flex flew-row carousel lg:grid lg:grid-cols-2 lg:gap-10">
+			<section className="w-full lg:w-2/3 h-1/2 lg:h-5/6 text-pri text-lg font-light flex flew-row items-center carousel lg:grid lg:grid-cols-2 lg:gap-10">
 				<article id="personal" className="w-11/12 h-[90%] px-6 carousel-item lg:h-full flex flex-col justify-between">
-					<h3 className="w-full text-transparent lg:text-pri text-2xl lg:text-3xl text-center font-semibold">
+					<h3 className="w-full hidden lg:flex lg:justify-center lg:text-pri text-2xl lg:text-3xl text-center font-semibold">
 						Lo esencial
 					</h3>
 					<div className="flex justify-between items-center">
@@ -291,23 +234,49 @@ console.log("RESUMEJSON", initialResumeJson);
 							</span>
 							<NavigateNextOutlinedIcon />
 						</label>
-						<input type="checkbox" id="modalTelefono" className="modal-toggle" />
+						<input type="checkbox" id="modalTelefono" className="modal-toggle" onClick={() => setUpdated("")} />
 						<div className="modal">
-							<div className="modal-box bg-sec">
-								<Phone handleChange={handleChange} userData={userData} inputPhone={inputPhone} />
+							<div className="modal-box flex flex-col justify-evenly bg-sec">
+								<Phone userData={userData} handleChange={handleChange} inputPhone={allow} />
 								<div className="modal-action">
-									<button
-										className={`w-fit px-2 py-1 ${
-											inputPhone ? "bg-red-500" : "bg-pri"
-										} text-sec rounded-lg  hover:text-pri hover:bg-pri-100`}
-										onClick={handleInputPhone}>
-										{inputPhone ? "Guardar" : "Editar"}
-									</button>
-									<label
-										htmlFor="modalTelefono"
-										className="w-fit px-2 py-1 bg-gray-400 rounded-lg hover:bg-pri-100 cursor-pointer">
-										Cerrar
-									</label>
+									<div className="w-full flex justify-between">
+										<p>{updated}</p>
+										{allow ? (
+											<div className="w-[50%] flex justify-end gap-5">
+												<button
+													className="w-fit px-2 py-1 bg-pri text-sec rounded-lg hover:scale-105 hover:bg-pri-800 active:scale-90 duration-100"
+													onClick={handlePut}>
+													Guardar
+												</button>
+												<button
+													className="w-fit px-2 py-1 bg-red-500 text-sec rounded-lg hover:scale-105 hover:bg-red-400 active:scale-90 duration-100"
+													onClick={() => {
+														setAllow(false);
+														setNewValue({ ...newValue, property_name: "" });
+														setUserData({ ...userData, phone: initialResumeJson.phone });
+													}}>
+													Cancelar
+												</button>
+											</div>
+										) : (
+											<div className="w-[50%] flex justify-end gap-5">
+												<button
+													className="w-fit px-2 py-1 bg-pri-200 text-pri rounded-lg hover:scale-105 hover:bg-pri-300 active:scale-90 duration-100"
+													onClick={() => {
+														setAllow(true);
+														setUpdated("");
+														setNewValue({ ...newValue, property_name: "phone" });
+													}}>
+													Editar
+												</button>
+												<label
+													htmlFor="modalTelefono"
+													className="w-fit px-2 py-1 bg-red-500 text-sec rounded-lg hover:scale-105 hover:bg-red-400 active:scale-90 duration-100 cursor-pointer">
+													Cerrar
+												</label>
+											</div>
+										)}
+									</div>
 								</div>
 							</div>
 						</div>
@@ -319,81 +288,157 @@ console.log("RESUMEJSON", initialResumeJson);
 							</span>
 							<NavigateNextOutlinedIcon />
 						</label>
-						<input type="checkbox" id="modalGenero" className="modal-toggle" />
+						<input type="checkbox" id="modalGenero" className="modal-toggle" onClick={() => setUpdated("")} />
 						<div className="modal">
-							<div className="modal-box bg-sec">
-								<Genres handleChange={handleChange} userData={userData} inputGenre={inputGenre} />
+							<div className={`modal-box ${open && "h-[230px]"} flex flex-col justify-between bg-sec`}>
+								<Genres userData={userData} handleChange={handleChange} inputGenre={allow} setOpen={setOpen} />
 								<div className="modal-action">
-									<button
-										className={`w-fit px-2 py-1 ${
-											inputGenre ? "bg-red-500" : "bg-pri"
-										} text-sec rounded-lg  hover:text-pri hover:bg-pri-100`}
-										onClick={handleInputGenre}>
-										{inputGenre ? "Guardar" : "Editar"}
-									</button>
-									<label
-										htmlFor="modalGenero"
-										className="w-fit px-2 py-1 bg-gray-400 rounded-lg hover:bg-pri-100 cursor-pointer">
-										Cerrar
-									</label>
+									<div className="w-full flex justify-between">
+										<p>{updated}</p>
+										{allow ? (
+											<div className="w-[50%] flex justify-end gap-5">
+												<button
+													className="w-fit px-2 py-1 bg-pri text-sec rounded-lg hover:scale-105 hover:bg-pri-800 active:scale-90 duration-100"
+													onClick={handlePut}>
+													Guardar
+												</button>
+												<button
+													className="w-fit px-2 py-1 bg-red-500 text-sec rounded-lg hover:scale-105 hover:bg-red-400 active:scale-90 duration-100"
+													onClick={() => {
+														setAllow(false);
+														setNewValue({ ...newValue, property_name: "" });
+														setUserData({ ...userData, genre: initialResumeJson.genre });
+													}}>
+													Cancelar
+												</button>
+											</div>
+										) : (
+											<div className="w-[50%] flex justify-end gap-5">
+												<button
+													className="w-fit px-2 py-1 bg-pri-200 text-pri rounded-lg hover:scale-105 hover:bg-pri-300 active:scale-90 duration-100"
+													onClick={() => {
+														setAllow(true);
+														setUpdated("");
+														setNewValue({ ...newValue, property_name: "genre" });
+													}}>
+													Editar
+												</button>
+												<label
+													htmlFor="modalGenero"
+													className="w-fit px-2 py-1 bg-red-500 text-sec rounded-lg hover:scale-105 hover:bg-red-400 active:scale-90 duration-100 cursor-pointer">
+													Cerrar
+												</label>
+											</div>
+										)}
+									</div>
 								</div>
 							</div>
 						</div>
 					</div>
 					<div className="flex justify-between items-center">
-						<label htmlFor="modalEdad" className="w-full flex flex-row justify-between items-center cursor-pointer">
+						<label htmlFor="modalAge" className="w-full flex flex-row justify-between items-center cursor-pointer">
 							<span>
 								<EscalatorWarningIcon /> Fecha de nacimiento
 							</span>
 							<NavigateNextOutlinedIcon />
 						</label>
-						<input type="checkbox" id="modalEdad" className="modal-toggle" />
+						<input type="checkbox" id="modalAge" className="modal-toggle" onClick={() => setUpdated("")} />
 						<div className="modal">
-							<div className="modal-box bg-sec">
-								<Birthdate handleChange={handleChange} userData={userData} inputBirthdate={inputBirthdate} />
+							<div className="modal-box flex flex-col justify-evenly bg-sec">
+								<Birthdate userData={userData} handleChange={handleChange} inputBirthdate={allow} />
 								<div className="modal-action">
-									<button
-										className={`w-fit px-2 py-1 ${
-											inputBirthdate ? "bg-red-500" : "bg-pri"
-										} text-sec rounded-lg  hover:text-pri hover:bg-pri-100`}
-										onClick={handleInputBirthdate}>
-										{inputBirthdate ? "Guardar" : "Editar"}
-									</button>
-									<label
-										htmlFor="modalEdad"
-										className="w-fit px-2 py-1 bg-gray-400 rounded-lg hover:bg-pri-100 cursor-pointer">
-										Cerrar
-									</label>
+									<div className="w-full flex justify-between">
+										<p>{updated}</p>
+										{allow ? (
+											<div className="w-[50%] flex justify-end gap-5">
+												<button
+													className="w-fit px-2 py-1 bg-pri text-sec rounded-lg hover:scale-105 hover:bg-pri-800 active:scale-90 duration-100"
+													onClick={handlePut}>
+													Guardar
+												</button>
+												<button
+													className="w-fit px-2 py-1 bg-red-500 text-sec rounded-lg hover:scale-105 hover:bg-red-400 active:scale-90 duration-100"
+													onClick={() => {
+														setAllow(false);
+														setNewValue({ ...newValue, property_name: "" });
+														setUserData({ ...userData, birthdate: initialResumeJson.birthdate });
+													}}>
+													Cancelar
+												</button>
+											</div>
+										) : (
+											<div className="w-[50%] flex justify-end gap-5">
+												<button
+													className="w-fit px-2 py-1 bg-pri-200 text-pri rounded-lg hover:scale-105 hover:bg-pri-300 active:scale-90 duration-100"
+													onClick={() => {
+														setAllow(true);
+														setUpdated("");
+														setNewValue({ ...newValue, property_name: "birthdate" });
+													}}>
+													Editar
+												</button>
+												<label
+													htmlFor="modalAge"
+													className="w-fit px-2 py-1 bg-red-500 text-sec rounded-lg hover:scale-105 hover:bg-red-400 active:scale-90 duration-100 cursor-pointer">
+													Cerrar
+												</label>
+											</div>
+										)}
+									</div>
 								</div>
 							</div>
 						</div>
 					</div>
 					<div className="flex justify-between items-center">
-						<label
-							htmlFor="modalNacimiento"
-							className="w-full flex flex-row justify-between items-center cursor-pointer">
+						<label htmlFor="modalBorn" className="w-full flex flex-row justify-between items-center cursor-pointer">
 							<span>
 								<FlagIcon /> Lugar de nacimiento
 							</span>
 							<NavigateNextOutlinedIcon />
 						</label>
-						<input type="checkbox" id="modalNacimiento" className="modal-toggle" />
+						<input type="checkbox" id="modalBorn" className="modal-toggle" onClick={() => setUpdated("")} />
 						<div className="modal">
-							<div className="modal-box bg-sec">
-								<Country handleChange={handleChange} userData={userData} inputCountry={inputCountry} />
+							<div className={`modal-box ${open && "h-[425px]"} flex flex-col justify-between bg-sec`}>
+								<Country userData={userData} handleChange={handleChange} inputCountry={allow} setOpen={setOpen} />
 								<div className="modal-action">
-									<button
-										className={`w-fit px-2 py-1 ${
-											inputCountry ? "bg-red-500" : "bg-pri"
-										} text-sec rounded-lg  hover:text-pri hover:bg-pri-100`}
-										onClick={handleInputCountry}>
-										{inputCountry ? "Guardar" : "Editar"}
-									</button>
-									<label
-										htmlFor="modalNacimiento"
-										className="w-fit px-2 py-1 bg-gray-400 rounded-lg hover:bg-pri-100 cursor-pointer">
-										Cerrar
-									</label>
+									<div className="w-full flex justify-between">
+										<p>{updated}</p>
+										{allow ? (
+											<div className="w-[50%] flex justify-end gap-5">
+												<button
+													className="w-fit px-2 py-1 bg-pri text-sec rounded-lg hover:scale-105 hover:bg-pri-800 active:scale-90 duration-100"
+													onClick={handlePut}>
+													Guardar
+												</button>
+												<button
+													className="w-fit px-2 py-1 bg-red-500 text-sec rounded-lg hover:scale-105 hover:bg-red-400 active:scale-90 duration-100"
+													onClick={() => {
+														setAllow(false);
+														setNewValue({ ...newValue, property_name: "" });
+														setUserData({ ...userData, country: initialResumeJson.country });
+													}}>
+													Cancelar
+												</button>
+											</div>
+										) : (
+											<div className="w-[50%] flex justify-end gap-5">
+												<button
+													className="w-fit px-2 py-1 bg-pri-200 text-pri rounded-lg hover:scale-105 hover:bg-pri-300 active:scale-90 duration-100"
+													onClick={() => {
+														setAllow(true);
+														setUpdated("");
+														setNewValue({ ...newValue, property_name: "country" });
+													}}>
+													Editar
+												</button>
+												<label
+													htmlFor="modalBorn"
+													className="w-fit px-2 py-1 bg-red-500 text-sec rounded-lg hover:scale-105 hover:bg-red-400 active:scale-90 duration-100 cursor-pointer">
+													Cerrar
+												</label>
+											</div>
+										)}
+									</div>
 								</div>
 							</div>
 						</div>
@@ -405,23 +450,49 @@ console.log("RESUMEJSON", initialResumeJson);
 							</span>
 							<NavigateNextOutlinedIcon />
 						</label>
-						<input type="checkbox" id="modalStatus" className="modal-toggle" />
+						<input type="checkbox" id="modalStatus" className="modal-toggle" onClick={() => setUpdated("")} />
 						<div className="modal">
-							<div className="modal-box bg-sec">
-								<Academic handleChange={handleChange} userData={userData} inputAcademic={inputAcademic} />
+							<div className={`modal-box ${open && "h-[235px]"} flex flex-col justify-between bg-sec`}>
+								<Academic userData={userData} handleChange={handleChange} inputAcademic={allow} setOpen={setOpen} />
 								<div className="modal-action">
-									<button
-										className={`w-fit px-2 py-1 ${
-											inputAcademic ? "bg-red-500" : "bg-pri"
-										} text-sec rounded-lg  hover:text-pri hover:bg-pri-100`}
-										onClick={handleInputAcademic}>
-										{inputAcademic ? "Guardar" : "Editar"}
-									</button>
-									<label
-										htmlFor="modalStatus"
-										className="w-fit px-2 py-1 bg-gray-400 rounded-lg hover:bg-pri-100 cursor-pointer">
-										Cerrar
-									</label>
+									<div className="w-full flex justify-between">
+										<p>{updated}</p>
+										{allow ? (
+											<div className="w-[50%] flex justify-end gap-5">
+												<button
+													className="w-fit px-2 py-1 bg-pri text-sec rounded-lg hover:scale-105 hover:bg-pri-800 active:scale-90 duration-100"
+													onClick={handlePut}>
+													Guardar
+												</button>
+												<button
+													className="w-fit px-2 py-1 bg-red-500 text-sec rounded-lg hover:scale-105 hover:bg-red-400 active:scale-90 duration-100"
+													onClick={() => {
+														setAllow(false);
+														setNewValue({ ...newValue, property_name: "" });
+														setUserData({ ...userData, academic: initialResumeJson.academic });
+													}}>
+													Cancelar
+												</button>
+											</div>
+										) : (
+											<div className="w-[50%] flex justify-end gap-5">
+												<button
+													className="w-fit px-2 py-1 bg-pri-200 text-pri rounded-lg hover:scale-105 hover:bg-pri-300 active:scale-90 duration-100"
+													onClick={() => {
+														setAllow(true);
+														setUpdated("");
+														setNewValue({ ...newValue, property_name: "academic" });
+													}}>
+													Editar
+												</button>
+												<label
+													htmlFor="modalStatus"
+													className="w-fit px-2 py-1 bg-red-500 text-sec rounded-lg hover:scale-105 hover:bg-red-400 active:scale-90 duration-100 cursor-pointer">
+													Cerrar
+												</label>
+											</div>
+										)}
+									</div>
 								</div>
 							</div>
 						</div>
@@ -433,146 +504,272 @@ console.log("RESUMEJSON", initialResumeJson);
 							</span>
 							<NavigateNextOutlinedIcon />
 						</label>
-						<input type="checkbox" id="modalUniv" className="modal-toggle" />
+						<input type="checkbox" id="modalUniv" className="modal-toggle" onClick={() => setUpdated("")} />
 						<div className="modal">
-							<div className="modal-box bg-sec flex flex-col">
-								<University handleChange={handleChange} userData={userData} inputUniversity={inputUniversity} />
+							<div className={`modal-box ${open && "h-[420px]"} flex flex-col justify-between bg-sec`}>
+								<University userData={userData} handleChange={handleChange} inputUniversity={allow} setOpen={setOpen} />
 								<div className="modal-action">
-									<button
-										className={`w-fit px-2 py-1 ${
-											inputUniversity ? "bg-red-500" : "bg-pri"
-										} text-sec rounded-lg  hover:text-pri hover:bg-pri-100`}
-										onClick={handleInputUniversity}>
-										{inputUniversity ? "Guardar" : "Editar"}
-									</button>
-									<label
-										htmlFor="modalUniv"
-										className="w-fit px-2 py-1 bg-gray-400 rounded-lg hover:bg-pri-100 cursor-pointer">
-										Cerrar
-									</label>
+									<div className="w-full flex justify-between">
+										<p>{updated}</p>
+										{allow ? (
+											<div className="w-[50%] flex justify-end gap-5">
+												<button
+													className="w-fit px-2 py-1 bg-pri text-sec rounded-lg hover:scale-105 hover:bg-pri-800 active:scale-90 duration-100"
+													onClick={handlePut}>
+													Guardar
+												</button>
+												<button
+													className="w-fit px-2 py-1 bg-red-500 text-sec rounded-lg hover:scale-105 hover:bg-red-400 active:scale-90 duration-100"
+													onClick={() => {
+														setAllow(false);
+														setNewValue({ ...newValue, property_name: "" });
+														setUserData({ ...userData, university: initialResumeJson.university });
+													}}>
+													Cancelar
+												</button>
+											</div>
+										) : (
+											<div className="w-[50%] flex justify-end gap-5">
+												<button
+													className="w-fit px-2 py-1 bg-pri-200 text-pri rounded-lg hover:scale-105 hover:bg-pri-300 active:scale-90 duration-100"
+													onClick={() => {
+														setAllow(true);
+														setUpdated("");
+														setNewValue({ ...newValue, property_name: "university" });
+													}}>
+													Editar
+												</button>
+												<label
+													htmlFor="modalUniv"
+													className="w-fit px-2 py-1 bg-red-500 text-sec rounded-lg hover:scale-105 hover:bg-red-400 active:scale-90 duration-100 cursor-pointer">
+													Cerrar
+												</label>
+											</div>
+										)}
+									</div>
 								</div>
 							</div>
 						</div>
 					</div>
 					<div className="flex justify-between items-center">
-						<label
-							htmlFor="modalQueEstudias"
-							className="w-full flex flex-row justify-between items-center cursor-pointer">
+						<label htmlFor="modalCareer" className="w-full flex flex-row justify-between items-center cursor-pointer">
 							<span>
 								<SchoolRoundedIcon /> Estudios
 							</span>
 							<NavigateNextOutlinedIcon />
 						</label>
-						<input type="checkbox" id="modalQueEstudias" className="modal-toggle" />
+						<input type="checkbox" id="modalCareer" className="modal-toggle" onClick={() => setUpdated("")} />
 						<div className="modal">
-							<div className="modal-box bg-sec">
-								<Career handleChange={handleChange} userData={userData} inputCareer={inputCareer} />
+							<div className={`modal-box ${open && "h-[420px]"} flex flex-col justify-between bg-sec`}>
+								<Career userData={userData} handleChange={handleChange} inputCareer={allow} setOpen={setOpen} />
 								<div className="modal-action">
-									<button
-										className={`w-fit px-2 py-1 ${
-											inputCareer ? "bg-red-500" : "bg-pri"
-										} text-sec rounded-lg  hover:text-pri hover:bg-pri-100`}
-										onClick={handleInputCareer}>
-										{inputCareer ? "Guardar" : "Editar"}
-									</button>
-									<label
-										htmlFor="modalQueEstudias"
-										className="w-fit px-2 py-1 bg-gray-400 rounded-lg hover:bg-pri-100 cursor-pointer">
-										Cerrar
-									</label>
+									<div className="w-full flex justify-between">
+										<p>{updated}</p>
+										{allow ? (
+											<div className="w-[50%] flex justify-end gap-5">
+												<button
+													className="w-fit px-2 py-1 bg-pri text-sec rounded-lg hover:scale-105 hover:bg-pri-800 active:scale-90 duration-100"
+													onClick={handlePut}>
+													Guardar
+												</button>
+												<button
+													className="w-fit px-2 py-1 bg-red-500 text-sec rounded-lg hover:scale-105 hover:bg-red-400 active:scale-90 duration-100"
+													onClick={() => {
+														setAllow(false);
+														setNewValue({ ...newValue, property_name: "" });
+														setUserData({ ...userData, career: initialResumeJson.career });
+													}}>
+													Cancelar
+												</button>
+											</div>
+										) : (
+											<div className="w-[50%] flex justify-end gap-5">
+												<button
+													className="w-fit px-2 py-1 bg-pri-200 text-pri rounded-lg hover:scale-105 hover:bg-pri-300 active:scale-90 duration-100"
+													onClick={() => {
+														setAllow(true);
+														setUpdated("");
+														setNewValue({ ...newValue, property_name: "career" });
+													}}>
+													Editar
+												</button>
+												<label
+													htmlFor="modalCareer"
+													className="w-fit px-2 py-1 bg-red-500 text-sec rounded-lg hover:scale-105 hover:bg-red-400 active:scale-90 duration-100 cursor-pointer">
+													Cerrar
+												</label>
+											</div>
+										)}
+									</div>
 								</div>
 							</div>
 						</div>
 					</div>
 					<div className="flex justify-between items-center">
-						<label htmlFor="modalIdiomas" className="w-full flex flex-row justify-between items-center cursor-pointer">
+						<label htmlFor="modalLang" className="w-full flex flex-row justify-between items-center cursor-pointer">
 							<span>
 								<TranslateIcon /> Idiomas
 							</span>
 							<NavigateNextOutlinedIcon />
 						</label>
-						<input type="checkbox" id="modalIdiomas" className="modal-toggle" />
+						<input type="checkbox" id="modalLang" className="modal-toggle" onClick={() => setUpdated("")} />
 						<div className="modal">
-							<div className="modal-box bg-sec flex flex-col">
-								<Languages handleChange={handleChange} userData={userData} inputLanguages={inputLanguages} />
+							<div className={`modal-box ${open && "h-[425px]"} flex flex-col justify-between bg-sec`}>
+								<Languages userData={userData} handleChange={handleChange} inputLanguages={allow} setOpen={setOpen} />
 								<div className="modal-action">
-									<button
-										className={`w-fit px-2 py-1 ${
-											inputLanguages ? "bg-red-500" : "bg-pri"
-										} text-sec rounded-lg  hover:text-pri hover:bg-pri-100`}
-										onClick={handleInputLanguages}>
-										{inputLanguages ? "Guardar" : "Editar"}
-									</button>
-									<label
-										htmlFor="modalIdiomas"
-										className="w-fit px-2 py-1 bg-gray-400 rounded-lg hover:bg-pri-100 cursor-pointer">
-										Cerrar
-									</label>
+									<div className="w-full flex justify-between">
+										<p>{updated}</p>
+										{allow ? (
+											<div className="w-[50%] flex justify-end gap-5">
+												<button
+													className="w-fit px-2 py-1 bg-pri text-sec rounded-lg hover:scale-105 hover:bg-pri-800 active:scale-90 duration-100"
+													onClick={handlePut}>
+													Guardar
+												</button>
+												<button
+													className="w-fit px-2 py-1 bg-red-500 text-sec rounded-lg hover:scale-105 hover:bg-red-400 active:scale-90 duration-100"
+													onClick={() => {
+														setAllow(false);
+														setNewValue({ ...newValue, property_name: "" });
+														setUserData({ ...userData, languages: initialResumeJson.languages });
+													}}>
+													Cancelar
+												</button>
+											</div>
+										) : (
+											<div className="w-[50%] flex justify-end gap-5">
+												<button
+													className="w-fit px-2 py-1 bg-pri-200 text-pri rounded-lg hover:scale-105 hover:bg-pri-300 active:scale-90 duration-100"
+													onClick={() => {
+														setAllow(true);
+														setUpdated("");
+														setNewValue({ ...newValue, property_name: "languages" });
+													}}>
+													Editar
+												</button>
+												<label
+													htmlFor="modalLang"
+													className="w-fit px-2 py-1 bg-red-500 text-sec rounded-lg hover:scale-105 hover:bg-red-400 active:scale-90 duration-100 cursor-pointer">
+													Cerrar
+												</label>
+											</div>
+										)}
+									</div>
 								</div>
 							</div>
 						</div>
 					</div>
 				</article>
 				<article id="laboral" className="w-11/12 h-[90%] px-6 carousel-item lg:h-full flex flex-col justify-between">
-					<h3 className="w-full text-transparent lg:text-pri text-2xl lg:text-3xl text-center font-semibold">
+					<h3 className="w-full hidden lg:flex lg:justify-center lg:text-pri text-2xl lg:text-3xl text-center font-semibold">
 						Lo que importa
 					</h3>
 					<div className="flex justify-between items-center">
-						<label
-							htmlFor="modalDondeVives"
-							className="w-full flex flex-row justify-between items-center cursor-pointer">
+						<label htmlFor="modalCity" className="w-full flex flex-row justify-between items-center cursor-pointer">
 							<span>
-								<LocationOnIcon /> Dirección actual
+								<LocationOnIcon /> Ciudad actual
 							</span>
 							<NavigateNextOutlinedIcon />
 						</label>
-						<input type="checkbox" id="modalDondeVives" className="modal-toggle" />
+						<input type="checkbox" id="modalCity" className="modal-toggle" onClick={() => setUpdated("")} />
 						<div className="modal">
-							<div className="modal-box bg-sec">
-								<OptionsCity handleChange={handleChange} userData={userData} inputCity={inputCity} />
+							<div className={`modal-box ${open && "h-[425px]"} flex flex-col justify-between bg-sec`}>
+								<City userData={userData} handleChange={handleChange} inputCity={allow} setOpen={setOpen} />
 								<div className="modal-action">
-									<button
-										className={`w-fit px-2 py-1 ${
-											inputCity ? "bg-red-500" : "bg-pri"
-										} text-sec rounded-lg  hover:text-pri hover:bg-pri-100`}
-										onClick={handleInputCity}>
-										{inputCity ? "Guardar" : "Editar"}
-									</button>
-									<label
-										htmlFor="modalDondeVives"
-										className="w-fit px-2 py-1 bg-gray-400 rounded-lg hover:bg-pri-100 cursor-pointer">
-										Cerrar
-									</label>
+									<div className="w-full flex justify-between">
+										<p>{updated}</p>
+										{allow ? (
+											<div className="w-[50%] flex justify-end gap-5">
+												<button
+													className="w-fit px-2 py-1 bg-pri text-sec rounded-lg hover:scale-105 hover:bg-pri-800 active:scale-90 duration-100"
+													onClick={handlePut}>
+													Guardar
+												</button>
+												<button
+													className="w-fit px-2 py-1 bg-red-500 text-sec rounded-lg hover:scale-105 hover:bg-red-400 active:scale-90 duration-100"
+													onClick={() => {
+														setAllow(false);
+														setNewValue({ ...newValue, property_name: "" });
+														setUserData({ ...userData, city: initialResumeJson.city });
+													}}>
+													Cancelar
+												</button>
+											</div>
+										) : (
+											<div className="w-[50%] flex justify-end gap-5">
+												<button
+													className="w-fit px-2 py-1 bg-pri-200 text-pri rounded-lg hover:scale-105 hover:bg-pri-300 active:scale-90 duration-100"
+													onClick={() => {
+														setAllow(true);
+														setUpdated("");
+														setNewValue({ ...newValue, property_name: "city" });
+													}}>
+													Editar
+												</button>
+												<label
+													htmlFor="modalCity"
+													className="w-fit px-2 py-1 bg-red-500 text-sec rounded-lg hover:scale-105 hover:bg-red-400 active:scale-90 duration-100 cursor-pointer">
+													Cerrar
+												</label>
+											</div>
+										)}
+									</div>
 								</div>
 							</div>
 						</div>
 					</div>
 					<div className="flex justify-between items-center">
 						<label
-							htmlFor="modalExperiencia"
+							htmlFor="modalExperience"
 							className="w-full flex flex-row justify-between items-center cursor-pointer">
 							<span>
 								<AutoFixHighIcon /> Años de experiencia
 							</span>
 							<NavigateNextOutlinedIcon />
 						</label>
-						<input type="checkbox" id="modalExperiencia" className="modal-toggle" />
+						<input type="checkbox" id="modalExperience" className="modal-toggle" onClick={() => setUpdated("")} />
 						<div className="modal">
-							<div className="modal-box bg-sec">
-								<Experience userData={userData} handleChange={handleChange} inputExperience={inputExperience} />
+							<div className={`modal-box ${open && "h-[305px]"} flex flex-col justify-between bg-sec`}>
+								<Experience userData={userData} handleChange={handleChange} inputExperience={allow} setOpen={setOpen} />
 								<div className="modal-action">
-									<button
-										className={`w-fit px-2 py-1 ${
-											inputExperience ? "bg-red-500" : "bg-pri"
-										} text-sec rounded-lg  hover:text-pri hover:bg-pri-100`}
-										onClick={handleInputExperience}>
-										{inputExperience ? "Guardar" : "Editar"}
-									</button>
-									<label
-										htmlFor="modalExperiencia"
-										className="w-fit px-2 py-1 bg-gray-400 rounded-lg hover:bg-pri-100 cursor-pointer">
-										Cerrar
-									</label>
+									<div className="w-full flex justify-between">
+										<p>{updated}</p>
+										{allow ? (
+											<div className="w-[50%] flex justify-end gap-5">
+												<button
+													className="w-fit px-2 py-1 bg-pri text-sec rounded-lg hover:scale-105 hover:bg-pri-800 active:scale-90 duration-100"
+													onClick={handlePut}>
+													Guardar
+												</button>
+												<button
+													className="w-fit px-2 py-1 bg-red-500 text-sec rounded-lg hover:scale-105 hover:bg-red-400 active:scale-90 duration-100"
+													onClick={() => {
+														setAllow(false);
+														setNewValue({ ...newValue, property_name: "" });
+														setUserData({ ...userData, years_xp: initialResumeJson.years_xp });
+													}}>
+													Cancelar
+												</button>
+											</div>
+										) : (
+											<div className="w-[50%] flex justify-end gap-5">
+												<button
+													className="w-fit px-2 py-1 bg-pri-200 text-pri rounded-lg hover:scale-105 hover:bg-pri-300 active:scale-90 duration-100"
+													onClick={() => {
+														setAllow(true);
+														setUpdated("");
+														setNewValue({ ...newValue, property_name: "years_xp" });
+													}}>
+													Editar
+												</button>
+												<label
+													htmlFor="modalExperience"
+													className="w-fit px-2 py-1 bg-red-500 text-sec rounded-lg hover:scale-105 hover:bg-red-400 active:scale-90 duration-100 cursor-pointer">
+													Cerrar
+												</label>
+											</div>
+										)}
+									</div>
 								</div>
 							</div>
 						</div>
@@ -584,143 +781,279 @@ console.log("RESUMEJSON", initialResumeJson);
 							</span>
 							<NavigateNextOutlinedIcon />
 						</label>
-						<input type="checkbox" id="modalSalario" className="modal-toggle" />
+						<input type="checkbox" id="modalSalario" className="modal-toggle" onClick={() => setUpdated("")} />
 						<div className="modal">
-							<div className="modal-box bg-sec">
-								<Income userData={userData} handleChange={handleChange} inputIncome={inputIncome} />
+							<div className="modal-box flex flex-col justify-evenly bg-sec">
+								<Income userData={userData} handleChange={handleChange} inputIncome={allow} />
 								<div className="modal-action">
-									<button
-										className={`w-fit px-2 py-1 ${
-											inputIncome ? "bg-red-500" : "bg-pri"
-										} text-sec rounded-lg  hover:text-pri hover:bg-pri-100`}
-										onClick={handleInputIncome}>
-										{inputIncome ? "Guardar" : "Editar"}
-									</button>
-									<label
-										htmlFor="modalSalario"
-										className="w-fit px-2 py-1 bg-gray-400 rounded-lg hover:bg-pri-100 cursor-pointer">
-										Cerrar
-									</label>
+									<div className="w-full flex justify-between">
+										<p>{updated}</p>
+										{allow ? (
+											<div className="w-[50%] flex justify-end gap-5">
+												<button
+													className="w-fit px-2 py-1 bg-pri text-sec rounded-lg hover:scale-105 hover:bg-pri-800 active:scale-90 duration-100"
+													onClick={handlePut}>
+													Guardar
+												</button>
+												<button
+													className="w-fit px-2 py-1 bg-red-500 text-sec rounded-lg hover:scale-105 hover:bg-red-400 active:scale-90 duration-100"
+													onClick={() => {
+														setAllow(false);
+														setNewValue({ ...newValue, property_name: "" });
+														setUserData({ ...userData, income: initialResumeJson.income });
+													}}>
+													Cancelar
+												</button>
+											</div>
+										) : (
+											<div className="w-[50%] flex justify-end gap-5">
+												<button
+													className="w-fit px-2 py-1 bg-pri-200 text-pri rounded-lg hover:scale-105 hover:bg-pri-300 active:scale-90 duration-100"
+													onClick={() => {
+														setAllow(true);
+														setUpdated("");
+														setNewValue({ ...newValue, property_name: "income" });
+													}}>
+													Editar
+												</button>
+												<label
+													htmlFor="modalSalario"
+													className="w-fit px-2 py-1 bg-red-500 text-sec rounded-lg hover:scale-105 hover:bg-red-400 active:scale-90 duration-100 cursor-pointer">
+													Cerrar
+												</label>
+											</div>
+										)}
+									</div>
 								</div>
 							</div>
 						</div>
 					</div>
 					<div className="flex justify-between items-center">
 						<label
-							htmlFor="modalDisponibilidad"
+							htmlFor="modalAvailability"
 							className="w-full flex flex-row justify-between items-center cursor-pointer">
 							<span>
 								<HourglassTopRoundedIcon /> Disponibilidad
 							</span>
 							<NavigateNextOutlinedIcon />
 						</label>
-						<input type="checkbox" id="modalDisponibilidad" className="modal-toggle" />
+						<input type="checkbox" id="modalAvailability" className="modal-toggle" onClick={() => setUpdated("")} />
 						<div className="modal">
-							<div className="modal-box bg-sec">
-								<Availability userData={userData} handleChange={handleChange} inputAvailability={inputAvailability} />
+							<div className={`modal-box ${open && "h-[200px]"} flex flex-col justify-between bg-sec`}>
+								<Availability
+									userData={userData}
+									handleChange={handleChange}
+									inputAvailability={allow}
+									setOpen={setOpen}
+								/>
 								<div className="modal-action">
-									<button
-										className={`w-fit px-2 py-1 ${
-											inputAvailability ? "bg-red-500" : "bg-pri"
-										} text-sec rounded-lg  hover:text-pri hover:bg-pri-100`}
-										onClick={handleInputAvailability}>
-										{inputAvailability ? "Guardar" : "Editar"}
-									</button>
-									<label
-										htmlFor="modalDisponibilidad"
-										className="w-fit px-2 py-1 bg-gray-400 rounded-lg hover:bg-pri-100 cursor-pointer">
-										Cerrar
-									</label>
+									<div className="w-full flex justify-between">
+										<p>{updated}</p>
+										{allow ? (
+											<div className="w-[50%] flex justify-end gap-5">
+												<button
+													className="w-fit px-2 py-1 bg-pri text-sec rounded-lg hover:scale-105 hover:bg-pri-800 active:scale-90 duration-100"
+													onClick={handlePut}>
+													Guardar
+												</button>
+												<button
+													className="w-fit px-2 py-1 bg-red-500 text-sec rounded-lg hover:scale-105 hover:bg-red-400 active:scale-90 duration-100"
+													onClick={() => {
+														setAllow(false);
+														setNewValue({ ...newValue, property_name: "" });
+														setUserData({ ...userData, availability: initialResumeJson.availability });
+													}}>
+													Cancelar
+												</button>
+											</div>
+										) : (
+											<div className="w-[50%] flex justify-end gap-5">
+												<button
+													className="w-fit px-2 py-1 bg-pri-200 text-pri rounded-lg hover:scale-105 hover:bg-pri-300 active:scale-90 duration-100"
+													onClick={() => {
+														setAllow(true);
+														setUpdated("");
+														setNewValue({ ...newValue, property_name: "availability" });
+													}}>
+													Editar
+												</button>
+												<label
+													htmlFor="modalAvailability"
+													className="w-fit px-2 py-1 bg-red-500 text-sec rounded-lg hover:scale-105 hover:bg-red-400 active:scale-90 duration-100 cursor-pointer">
+													Cerrar
+												</label>
+											</div>
+										)}
+									</div>
 								</div>
 							</div>
 						</div>
 					</div>
 					<div className="flex justify-between items-center">
-						<label
-							htmlFor="modalAreasInteres"
-							className="w-full flex flex-row justify-between items-center cursor-pointer">
+						<label htmlFor="modalAreas" className="w-full flex flex-row justify-between items-center cursor-pointer">
 							<span>
 								<ZoomInIcon /> Áreas de interés
 							</span>
 							<NavigateNextOutlinedIcon />
 						</label>
-						<input type="checkbox" id="modalAreasInteres" className="modal-toggle" />
+						<input type="checkbox" id="modalAreas" className="modal-toggle" onClick={() => setUpdated("")} />
 						<div className="modal">
-							<div className="modal-box bg-sec">
-								<Profession handleChange={handleChange} userData={userData} inputProf={inputProf} />
+							<div className={`modal-box ${open && "h-[425px]"} flex flex-col justify-between bg-sec`}>
+								<Profession handleChange={handleChange} userData={userData} inputProf={allow} setOpen={setOpen} />
 								<div className="modal-action">
-									<button
-										className={`w-fit px-2 py-1 ${
-											inputProf ? "bg-red-500" : "bg-pri"
-										} text-sec rounded-lg  hover:text-pri hover:bg-pri-100`}
-										onClick={handleInputProf}>
-										{inputProf ? "Guardar" : "Editar"}
-									</button>
-									<label
-										htmlFor="modalAreasInteres"
-										className="w-fit px-2 py-1 bg-gray-400 rounded-lg hover:bg-pri-100 cursor-pointer">
-										Cerrar
-									</label>
+									<div className="w-full flex justify-between">
+										<p>{updated}</p>
+										{allow ? (
+											<div className="w-[50%] flex justify-end gap-5">
+												<button
+													className="w-fit px-2 py-1 bg-pri text-sec rounded-lg hover:scale-105 hover:bg-pri-800 active:scale-90 duration-100"
+													onClick={handlePut}>
+													Guardar
+												</button>
+												<button
+													className="w-fit px-2 py-1 bg-red-500 text-sec rounded-lg hover:scale-105 hover:bg-red-400 active:scale-90 duration-100"
+													onClick={() => {
+														setAllow(false);
+														setNewValue({ ...newValue, property_name: "" });
+														setUserData({ ...userData, profession: initialResumeJson.profession });
+													}}>
+													Cancelar
+												</button>
+											</div>
+										) : (
+											<div className="w-[50%] flex justify-end gap-5">
+												<button
+													className="w-fit px-2 py-1 bg-pri-200 text-pri rounded-lg hover:scale-105 hover:bg-pri-300 active:scale-90 duration-100"
+													onClick={() => {
+														setAllow(true);
+														setUpdated("");
+														setNewValue({ ...newValue, property_name: "profession" });
+													}}>
+													Editar
+												</button>
+												<label
+													htmlFor="modalAreas"
+													className="w-fit px-2 py-1 bg-red-500 text-sec rounded-lg hover:scale-105 hover:bg-red-400 active:scale-90 duration-100 cursor-pointer">
+													Cerrar
+												</label>
+											</div>
+										)}
+									</div>
 								</div>
 							</div>
 						</div>
 					</div>
 					<div className="flex justify-between items-center">
-						<label
-							htmlFor="modalFormaTrabajo"
-							className="w-full flex flex-row justify-between items-center cursor-pointer">
+						<label htmlFor="modalForm" className="w-full flex flex-row justify-between items-center cursor-pointer">
 							<span>
 								<PhonelinkRoundedIcon /> Forma de trabajo
 							</span>
 							<NavigateNextOutlinedIcon />
 						</label>
-						<input type="checkbox" id="modalFormaTrabajo" className="modal-toggle" />
+						<input type="checkbox" id="modalForm" className="modal-toggle" onClick={() => setUpdated("")} />
 						<div className="modal">
-							<div className="modal-box bg-sec">
-								<FormOfWork userData={userData} handleChange={handleChange} inputFormOfWork={inputFormOfWork} />
+							<div className={`modal-box ${open && "h-[235px]"} flex flex-col justify-between bg-sec`}>
+								<FormOfWork userData={userData} handleChange={handleChange} inputFormOfWork={allow} setOpen={setOpen} />
 								<div className="modal-action">
-									<button
-										className={`w-fit px-2 py-1 ${
-											inputFormOfWork ? "bg-red-500" : "bg-pri"
-										} text-sec rounded-lg  hover:text-pri hover:bg-pri-100`}
-										onClick={handleInputFormOfWork}>
-										{inputFormOfWork ? "Guardar" : "Editar"}
-									</button>
-									<label
-										htmlFor="modalFormaTrabajo"
-										className="w-fit px-2 py-1 bg-gray-400 rounded-lg hover:bg-pri-100 cursor-pointer">
-										Cerrar
-									</label>
+									<div className="w-full flex justify-between">
+										<p>{updated}</p>
+										{allow ? (
+											<div className="w-[50%] flex justify-end gap-5">
+												<button
+													className="w-fit px-2 py-1 bg-pri text-sec rounded-lg hover:scale-105 hover:bg-pri-800 active:scale-90 duration-100"
+													onClick={handlePut}>
+													Guardar
+												</button>
+												<button
+													className="w-fit px-2 py-1 bg-red-500 text-sec rounded-lg hover:scale-105 hover:bg-red-400 active:scale-90 duration-100"
+													onClick={() => {
+														setAllow(false);
+														setNewValue({ ...newValue, property_name: "" });
+														setUserData({ ...userData, form_of_work: initialResumeJson.form_of_work });
+													}}>
+													Cancelar
+												</button>
+											</div>
+										) : (
+											<div className="w-[50%] flex justify-end gap-5">
+												<button
+													className="w-fit px-2 py-1 bg-pri-200 text-pri rounded-lg hover:scale-105 hover:bg-pri-300 active:scale-90 duration-100"
+													onClick={() => {
+														setAllow(true);
+														setUpdated("");
+														setNewValue({ ...newValue, property_name: "form_of_work" });
+													}}>
+													Editar
+												</button>
+												<label
+													htmlFor="modalForm"
+													className="w-fit px-2 py-1 bg-red-500 text-sec rounded-lg hover:scale-105 hover:bg-red-400 active:scale-90 duration-100 cursor-pointer">
+													Cerrar
+												</label>
+											</div>
+										)}
+									</div>
 								</div>
 							</div>
 						</div>
 					</div>
 					<div className="flex justify-between items-center">
 						<label
-							htmlFor="modalReubicarte"
+							htmlFor="modalReubication"
 							className="w-full flex flex-row justify-between items-center cursor-pointer">
 							<span>
 								<MapIcon /> Podrías reubicarte?
 							</span>
 							<NavigateNextOutlinedIcon />
 						</label>
-						<input type="checkbox" id="modalReubicarte" className="modal-toggle" />
+						<input type="checkbox" id="modalReubication" className="modal-toggle" onClick={() => setUpdated("")} />
 						<div className="modal">
-							<div className="modal-box bg-sec">
-								<Reubication handleChange={handleChange} userData={userData} inputReubication={inputReubication} />
+							<div className={`modal-box ${open && "h-[200px]"} flex flex-col justify-between bg-sec`}>
+								<Reubication
+									handleChange={handleChange}
+									userData={userData}
+									inputReubication={allow}
+									setOpen={setOpen}
+								/>
 								<div className="modal-action">
-									<button
-										className={`w-fit px-2 py-1 ${
-											inputReubication ? "bg-red-500" : "bg-pri"
-										} text-sec rounded-lg  hover:text-pri hover:bg-pri-100`}
-										onClick={handleInputReubication}>
-										{inputReubication ? "Guardar" : "Editar"}
-									</button>
-									<label
-										htmlFor="modalReubicarte"
-										className="w-fit px-2 py-1 bg-gray-400 rounded-lg hover:bg-pri-100 cursor-pointer">
-										Cerrar
-									</label>
+									<div className="w-full flex justify-between">
+										<p>{updated}</p>
+										{allow ? (
+											<div className="w-[50%] flex justify-end gap-5">
+												<button
+													className="w-fit px-2 py-1 bg-pri text-sec rounded-lg hover:scale-105 hover:bg-pri-800 active:scale-90 duration-100"
+													onClick={handlePut}>
+													Guardar
+												</button>
+												<button
+													className="w-fit px-2 py-1 bg-red-500 text-sec rounded-lg hover:scale-105 hover:bg-red-400 active:scale-90 duration-100"
+													onClick={() => {
+														setAllow(false);
+														setNewValue({ ...newValue, property_name: "" });
+														setUserData({ ...userData, reubication: initialResumeJson.reubication });
+													}}>
+													Cancelar
+												</button>
+											</div>
+										) : (
+											<div className="w-[50%] flex justify-end gap-5">
+												<button
+													className="w-fit px-2 py-1 bg-pri-200 text-pri rounded-lg hover:scale-105 hover:bg-pri-300 active:scale-90 duration-100"
+													onClick={() => {
+														setAllow(true);
+														setUpdated("");
+														setNewValue({ ...newValue, property_name: "reubication" });
+													}}>
+													Editar
+												</button>
+												<label
+													htmlFor="modalReubication"
+													className="w-fit px-2 py-1 bg-red-500 text-sec rounded-lg hover:scale-105 hover:bg-red-400 active:scale-90 duration-100 cursor-pointer">
+													Cerrar
+												</label>
+											</div>
+										)}
+									</div>
 								</div>
 							</div>
 						</div>
@@ -732,23 +1065,49 @@ console.log("RESUMEJSON", initialResumeJson);
 							</span>
 							<NavigateNextOutlinedIcon />
 						</label>
-						<input type="checkbox" id="modalHobbies" className="modal-toggle" />
+						<input type="checkbox" id="modalHobbies" className="modal-toggle" onClick={() => setUpdated("")} />
 						<div className="modal">
-							<div className="modal-box bg-sec flex flex-col">
-								<Hobbies handleChange={handleChange} userData={userData} inputHobbies={inputHobbies} />
+							<div className={`modal-box ${open && "h-[230px]"} flex flex-col justify-between bg-sec`}>
+								<Hobbies handleChange={handleChange} userData={userData} inputHobbies={allow} setOpen={setOpen} />
 								<div className="modal-action">
-									<button
-										className={`w-fit px-2 py-1 ${
-											inputHobbies ? "bg-red-500" : "bg-pri"
-										} text-sec rounded-lg  hover:text-pri hover:bg-pri-100`}
-										onClick={handleInputHobbies}>
-										{inputHobbies ? "Guardar" : "Editar"}
-									</button>
-									<label
-										htmlFor="modalHobbies"
-										className="w-fit px-2 py-1 bg-gray-400 rounded-lg hover:bg-pri-100 cursor-pointer">
-										Cerrar
-									</label>
+									<div className="w-full flex justify-between">
+										<p>{updated}</p>
+										{allow ? (
+											<div className="w-[50%] flex justify-end gap-5">
+												<button
+													className="w-fit px-2 py-1 bg-pri text-sec rounded-lg hover:scale-105 hover:bg-pri-800 active:scale-90 duration-100"
+													onClick={handlePut}>
+													Guardar
+												</button>
+												<button
+													className="w-fit px-2 py-1 bg-red-500 text-sec rounded-lg hover:scale-105 hover:bg-red-400 active:scale-90 duration-100"
+													onClick={() => {
+														setAllow(false);
+														setNewValue({ ...newValue, property_name: "" });
+														setUserData({ ...userData, hobbies: initialResumeJson.hobbies });
+													}}>
+													Cancelar
+												</button>
+											</div>
+										) : (
+											<div className="w-[50%] flex justify-end gap-5">
+												<button
+													className="w-fit px-2 py-1 bg-pri-200 text-pri rounded-lg hover:scale-105 hover:bg-pri-300 active:scale-90 duration-100"
+													onClick={() => {
+														setAllow(true);
+														setUpdated("");
+														setNewValue({ ...newValue, property_name: "hobbies" });
+													}}>
+													Editar
+												</button>
+												<label
+													htmlFor="modalHobbies"
+													className="w-fit px-2 py-1 bg-red-500 text-sec rounded-lg hover:scale-105 hover:bg-red-400 active:scale-90 duration-100 cursor-pointer">
+													Cerrar
+												</label>
+											</div>
+										)}
+									</div>
 								</div>
 							</div>
 						</div>

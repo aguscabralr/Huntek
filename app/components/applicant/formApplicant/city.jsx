@@ -34,19 +34,103 @@ const customStyles = {
 			color: "#000",
 		},
 		cursor: "pointer",
+		whiteSpace: "nowrap",
+		overflow: "hidden",
+		textOverflow: "ellipsis",
 	}),
 };
 
-const FormOfWork = ({ userData, handleChange, inputFormOfWork, setOpen }) => {
-	const options = ["Presencial", "Híbrido", "Remoto"];
+const City = ({ userData, handleChange, inputCity, setOpen }) => {
+	const options = [
+		"Ciudad de México",
+		"Estado de México",
+		"Acapulco",
+		"Aguascalientes",
+		"Campeche",
+		"Cancún",
+		"Celaya",
+		"Chetumal",
+		"Chihuahua",
+		"Chilpacingo",
+		"Ciudad del Carmen",
+		"Ciudad Obregón",
+		"Ciudad Victoria",
+		"Coatzacoalcos",
+		"Colima",
+		"Cuautla",
+		"Cuernavaca",
+		"Cuilicán",
+		"Cárdenas",
+		"Córdoba",
+		"Durango",
+		"Ensenada",
+		"Guadalajara",
+		"Guanajuato",
+		"Guayamas",
+		"Hermosillo",
+		"Irapuato",
+		"Juárez",
+		"La Laguna",
+		"La Paz",
+		"La Piedad",
+		"León",
+		"Los Cabos",
+		"Los Mochis",
+		"Manzanillo",
+		"Matamorros",
+		"Mazatlán",
+		"Mexicali",
+		"Minititlán",
+		"Monclova",
+		"Monterrey",
+		"Morelia",
+		"Mérida",
+		"Nuevo Laredo",
+		"Oaxaca",
+		"Ocotlán",
+		"Orizaba",
+		"Pachuca",
+		"Piedras Negras",
+		"Poza Rica",
+		"Puebla-Tlaxcala",
+		"Puerto Vallarta",
+		"Querétaro",
+		"Reynosa",
+		"Río Verde",
+		"Salamanca",
+		"Saltillo",
+		"San Francisco del Rincón",
+		"San Juan del Río",
+		"San Luis Potosí",
+		"Tampico",
+		"Tapachula",
+		"Tecomán",
+		"Tehuacán",
+		"Tehuantepec",
+		"Tepic",
+		"Tijuana",
+		"Tlaxcala",
+		"Toluca",
+		"Tula",
+		"Tulancingo",
+		"Tulancingo",
+		"Tuxtla Gutiérrez",
+		"Uruapan",
+		"Valle de México",
+		"Veracruz",
+		"Villahermosa",
+		"Xalapa",
+		"Zacatecas",
+		"Zamora",
+	];
 
 	const [selectedOption, setSelectedOption] = useState(null);
-	const selectOptions = options.map((form_of_work) => ({ value: form_of_work, label: form_of_work }));
+	const selectOptions = options.map((city) => ({ value: city, label: city }));
 
 	const path = usePathname();
 	useEffect(() => {
 		if (path === "/applicant/profileExtend") {
-			setSelectedOption({ value: userData.form_of_work, label: userData.form_of_work });
+			setSelectedOption({ value: userData.city, label: userData.city });
 		}
 	}, [userData]);
 
@@ -54,16 +138,16 @@ const FormOfWork = ({ userData, handleChange, inputFormOfWork, setOpen }) => {
 		setSelectedOption(selectedOption);
 		handleChange({
 			target: {
-				name: "form_of_work",
-				value: selectedOption.value,
+				name: "city",
+				value: selectedOption ? selectedOption.value : "",
 			},
 		});
 	};
 
 	return (
 		<div className="w-full">
-			<label htmlFor="form_of_work" className="mr-2 font-semibold">
-				¿Qué forma de trabajo prefieres?
+			<label htmlFor="city" className="ml-2 font-semibold">
+				¿En qué ciudad vives?
 				<span className="dropdown dropdown-hover font-normal">
 					<div tabIndex={0}>
 						<NotListedLocationOutlinedIcon className="pb-1" />
@@ -76,12 +160,12 @@ const FormOfWork = ({ userData, handleChange, inputFormOfWork, setOpen }) => {
 				</span>
 			</label>
 			<Select
-				name="form_of_work"
+				name="city"
 				value={selectedOption}
 				options={selectOptions}
 				menuPlacement="auto"
-				placeholder="Selecciona una respuesta"
-				isDisabled={!inputFormOfWork}
+				placeholder="Selecciona una ciudad"
+				isDisabled={!inputCity}
 				isClearable={selectedOption !== null}
 				onChange={handleSelectChange}
 				onMenuOpen={() => path === "/applicant/profileExtend" && setOpen(true)}
@@ -91,4 +175,4 @@ const FormOfWork = ({ userData, handleChange, inputFormOfWork, setOpen }) => {
 		</div>
 	);
 };
-export default FormOfWork;
+export default City;

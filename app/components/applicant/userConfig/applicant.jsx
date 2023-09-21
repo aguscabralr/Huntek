@@ -1,5 +1,4 @@
 "use client";
-import Link from "next/link";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -12,7 +11,7 @@ import DriveFolderUploadOutlinedIcon from "@mui/icons-material/DriveFolderUpload
 import CloseIcon from "@mui/icons-material/Close";
 import Genres from "../formApplicant/genres";
 import Country from "../formApplicant/country";
-import OptionsCity from "../formApplicant/optionsCity";
+import OptionsCity from "../formApplicant/city";
 import Phone from "../formApplicant/phone";
 import Birthdate from "../formApplicant/birthdate";
 import Academic from "../formApplicant/academic";
@@ -37,6 +36,7 @@ const ApplicantConfig = () => {
 
 	const [profilePictureFile, setProfilePictureFile] = useState(null);
 	const [profilePicFileName, setProfilePicFileName] = useState(false);
+	const [profilePicture, setProfilePicture] = useState("");
 
 	const [errorCatched, setErrorCatched] = useState(null);
 	const [successReq, setSuccessReq] = useState(null);
@@ -51,10 +51,18 @@ const ApplicantConfig = () => {
 		event.target.value = null;
 	};
 	const handleProfilePictureChange = (event) => {
-    setProfilePictureFile(event.target.files[0]);
-    setProfilePicFileName(event.target.files[0].name);
-    event.target.value = null;
-};
+		const file = event.target.files[0];
+		setProfilePictureFile(file);
+		setProfilePicFileName(file.name);
+		if (file) {
+			const reader = new FileReader();
+			reader.onload = (event) => {
+				setProfilePicture(event.target.result);
+			};
+			reader.readAsDataURL(file);
+		}
+		event.target.value = null;
+	};
 	const [activate, setActivate] = useState(true);
 
 	const [userData, setUserData] = useState({
@@ -75,6 +83,35 @@ const ApplicantConfig = () => {
 		income: "",
 		form_of_work: "",
 		availability: "",
+	});
+
+	useEffect(() => {
+		window.addEventListener("beforeunload", (event) => {
+			if (
+				userData.phone.length ||
+				userData.academic.length ||
+				userData.birthdate.length ||
+				userData.genre.length ||
+				userData.country.length ||
+				userData.city.length ||
+				userData.reubication.length ||
+				userData.languages.length ||
+				userData.profession.length ||
+				userData.university.length ||
+				userData.career.length ||
+				userData.hobbies.length ||
+				userData.years_xp.length ||
+				userData.income.length ||
+				userData.form_of_work.length ||
+				userData.availability.length
+			) {
+				event.preventDefault();
+				event.returnValue = "";
+			}
+		});
+		return window.removeEventListener("beforeunload", (event) => {
+			event.preventDefault();
+		});
 	});
 
 	const [progress, setProgress] = useState(0);
@@ -174,7 +211,7 @@ const ApplicantConfig = () => {
 							<article className="w-full flex flex-col justify-around items-center">
 								<div className="w-32 h-32 border-4 border-pri rounded-full relative">
 									<Image
-										src={"/images/defaultPhoto.png"}
+										src={profilePicture ? profilePicture : "/images/defaultPhoto.png"}
 										alt="profileImg"
 										fill={true}
 										className="rounded-full object-contain absolute"
@@ -190,8 +227,13 @@ const ApplicantConfig = () => {
 								{profilePicFileName && (
 									<span className="">
 										{profilePicFileName}
-										<button onClick={() => {setProfilePictureFile(null); setProfilePicFileName(false)}}>
-											<CloseIcon style={{ fontSize: "medium" }}/>
+										<button
+											onClick={() => {
+												setProfilePictureFile(null);
+												setProfilePicFileName(false);
+												setProfilePicture("");
+											}}>
+											<CloseIcon style={{ fontSize: "medium" }} />
 										</button>
 									</span>
 								)}
@@ -208,8 +250,12 @@ const ApplicantConfig = () => {
 								{cvFileName && (
 									<span className="">
 										{cvFileName}
-										<button onClick={() => {setCvFile(null); setCvFileName(false)}}>
-											<CloseIcon style={{ fontSize: "medium" }}/>
+										<button
+											onClick={() => {
+												setCvFile(null);
+												setCvFileName(false);
+											}}>
+											<CloseIcon style={{ fontSize: "medium" }} />
 										</button>
 									</span>
 								)}

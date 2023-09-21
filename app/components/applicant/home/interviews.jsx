@@ -4,21 +4,21 @@ import LocationOnIcon from "@mui/icons-material/LocationOn";
 import InfoAlert from "./infoAlert";
 
 const hardcodedInterviews = [
-	{
-		enterprise: "Huntek",
-		date: "22 SEP",
-		hour: "15:30HS",
-	},
-	{
-		enterprise: "Bimbo",
-		date: "31 DIC",
-		hour: "21:00HS",
-	},
-	{
-		enterprise: "Pantene",
-		date: "18 NOV",
-		hour: "09:20HS",
-	},
+	// {
+	// 	enterprise: "Huntek",
+	// 	date: "22 SEP",
+	// 	hour: "15:30HS",
+	// },
+	// {
+	// 	enterprise: "Bimbo",
+	// 	date: "31 DIC",
+	// 	hour: "21:00HS",
+	// },
+	// {
+	// 	enterprise: "Pantene",
+	// 	date: "18 NOV",
+	// 	hour: "09:20HS",
+	// },
 ];
 
 const Interviews = () => {
@@ -36,7 +36,6 @@ const Interviews = () => {
 						if (index === 0 || index === 1) {
 							return (
 								<article
-									key={index}
 									className={`${
 										index === 1 && "hidden md:flex md:flex-row"
 									} flex flex-row w-full h-20 px-4 bg-sec text-xs xs:text-sm text-pri border rounded-xl shadow-md justify-between items-center`}>
@@ -60,8 +59,8 @@ const Interviews = () => {
 				</div>
 			) : (
 				<div className="w-full min-h-[88px] px-2 flex justify-center items-center relative mb-1 md:mb-0">
-					{/* <InfoAlert alertBody={"En este espacio tendrás un recordatorio de tu entrevista mas cercana"} /> */}
-					<p className="text-pri absolute z-10">No tienes entrevistas agendadas</p>
+					<InfoAlert alertBody={"En este espacio tendrás un recordatorio de tu entrevista mas cercana"} />
+					<p className="text-base absolute z-10">Aún no tienes entrevistas agendadas</p>
 				</div>
 			)}
 		</article>

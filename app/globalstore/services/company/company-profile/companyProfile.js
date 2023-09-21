@@ -1,9 +1,9 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
-export const editResumeDB = createApi({
-  reducerPath: "editResumeDB",
+export const companyInfoDB = createApi({
+  reducerPath: "companyInfoDB",
   baseQuery: fetchBaseQuery({
-    baseUrl: "https://dev.api.app.huntek.com/api/v1/profile/user-profiles",
+    baseUrl: "https://dev.api.app.huntek.com/api/v1/companyprofile/company-profiles",
     prepareHeaders: (headers) => {
       const token = document.cookie
         .split("; ")
@@ -14,14 +14,11 @@ export const editResumeDB = createApi({
     },
   }),
   endpoints: (builder) => ({
-    putResume: builder.mutation({
-      query: ({ user_id, data }) => ({
-        url: `/${user_id}`,
-        method: "PUT",
-        body: data,
-      }),
+    getcompanyInfo: builder.query({
+      query: (user_id) => `/${user_id}`,
+      method: "GET",
     }),
   }),
 });
 
-export const { usePutResumeMutation } = editResumeDB;
+export const { useGetcompanyInfoQuery } = companyInfoDB;
