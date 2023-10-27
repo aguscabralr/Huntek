@@ -15,9 +15,9 @@ const customStyles = {
 		},
 		cursor: "pointer",
 	}),
-	singleValue: (provided, state) => ({
+	singleValue: (provided) => ({
 		...provided,
-		color: state.isDisabled ? "#888" : "#046255",
+		color: "#046255",
 	}),
 	menu: (provided) => ({
 		...provided,
@@ -28,37 +28,80 @@ const customStyles = {
 		height: "35px",
 		textAlign: "left",
 		backgroundColor: state.isSelected ? "#046255" : "#e3eeec",
-		color: state.isSelected ? "#fff" : "#000",
+		color: state.isSelected ? "#fff" : "#333",
 		"&:hover": {
 			backgroundColor: "#c7dcd9",
-			color: "#000",
 		},
 		cursor: "pointer",
+		whiteSpace: "nowrap",
+		overflow: "hidden",
+		textOverflow: "ellipsis",
 	}),
 };
 
-const Genres = ({ userData, handleChange, inputGenre, setOpen }) => {
+const Skills = ({ userData, handleChange, inputSkills, setOpen }) => {
 	const options = [
-		"Hombre",
-		"Mujer",
-		"No binario",
-		"Género fluido",
-		"Transgénero",
-		"Género queer",
-		"Género agénero",
-		"Género andrógino",
-		"Bigénero",
-		"Género neutro",
-		"Dos espíritus",
+		"Adaptabilidad",
+		"Altruismo",
+		"Amabilidad",
+		"Ambición",
+		"Asertividad",
+		"Autoconfianza",
+		"Autodisciplina",
+		"Autocontrol",
+		"Bondad",
+		"Colaboración",
+		"Comunicación",
+		"Confianza",
+		"Creatividad",
+		"Crítico",
+		"Decisión",
+		"Detallista",
+		"Dedicación",
+		"Empatía",
+		"Escucha activa",
+		"Ética",
+		"Flexibilidad",
+		"Gestión de conflictos",
+		"Gestión de crisis",
+		"Gestión de proyectos",
+		"Gestión del tiempo",
+		"Honestidad",
+		"Iniciativa",
+		"Innovación",
+		"Inteligencia",
+		"Liderazgo",
+		"Motivación",
+		"Negociación",
+		"Orientación al cliente",
+		"Orientación al detalle",
+		"Perseverancia",
+		"Puntualidad",
+		"Planificación",
+		"Positividad",
+		"Proactividad",
+		"Rendimiento",
+		"Resiliencia",
+		"Respeto",
+		"Resolución de conflictos",
+		"Sensatez",
+		"Solidaridad",
+		"Toma de decisiones",
+		"Trabajo en equipo",
 	];
 
-	const [selectedOption, setSelectedOption] = useState("");
-	const selectOptions = options.map((genre) => ({ value: genre, label: genre }));
+	const [selectedOption, setSelectedOption] = useState([]);
+	const selectOptions = options.map((skills) => ({ value: skills, label: skills }));
 
 	const path = usePathname();
 	useEffect(() => {
 		if (path === "/applicant/profileExtend") {
-			setSelectedOption({ value: userData.genre, label: userData.genre });
+			const oldData = [];
+			userData.hobbies.length &&
+				userData.hobbies.map((ski) => {
+					oldData.push({ value: ski, label: ski });
+				});
+			setSelectedOption(oldData);
 		}
 	}, [userData]);
 
@@ -66,16 +109,16 @@ const Genres = ({ userData, handleChange, inputGenre, setOpen }) => {
 		setSelectedOption(selectedOption);
 		handleChange({
 			target: {
-				name: "genre",
-				value: selectedOption.value,
+				name: "hobbies",
+				value: selectedOption.map((opt) => opt.value),
 			},
 		});
 	};
 
 	return (
 		<div className="w-full">
-			<label htmlFor="genre" className="ml-2 font-semibold">
-				¿Cuál es tu género?
+			<label htmlFor="skills" className="ml-2 font-semibold">
+				¿Cuáles son tus aptitudes?
 				<span className="dropdown dropdown-hover font-normal">
 					<div tabIndex={0}>
 						<NotListedLocationOutlinedIcon className="pb-1" />
@@ -88,12 +131,13 @@ const Genres = ({ userData, handleChange, inputGenre, setOpen }) => {
 				</span>
 			</label>
 			<Select
-				name="genre"
+				isMulti
+				name="hobbies"
 				value={selectedOption}
 				options={selectOptions}
 				menuPlacement="auto"
-				placeholder="Selecciona un género"
-				isDisabled={!inputGenre}
+				placeholder="Selecciona tus aptitudes"
+				isDisabled={!inputSkills}
 				isClearable={selectedOption !== null}
 				onChange={handleSelectChange}
 				onMenuOpen={() => path === "/applicant/profileExtend" && setOpen(true)}
@@ -103,5 +147,4 @@ const Genres = ({ userData, handleChange, inputGenre, setOpen }) => {
 		</div>
 	);
 };
-
-export default Genres;
+export default Skills;

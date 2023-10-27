@@ -3,15 +3,22 @@ import { gsap } from "gsap";
 import { useEffect } from "react";
 import LogForm from "../components/login";
 
-const Login = () => {
-	const hi = () => {
-		var tl = gsap.timeline();
-		tl.from("#logo", { x: 300 }, "+=1");
-		tl.from("#form", { x: -200, opacity: 0 });
-	};
+const row = () => {
+	var tl = gsap.timeline();
+	tl.from("#logo", { x: "+70%" }, "+=1");
+	tl.from("#form", { x: -200, opacity: 0 });
+};
 
+const col = () => {
+	var tl = gsap.timeline();
+	tl.from("#logo", { y: "+60%" }, "+=1");
+	tl.from("#form", { y: -200, opacity: 0 });
+};
+
+const Login = () => {
 	useEffect(() => {
-		hi();
+		const width = window.innerWidth;
+		width < 1000 ? col() : row();
 	}, []);
 
 	return (
