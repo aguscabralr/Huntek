@@ -3,7 +3,7 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 export const editResumeDB = createApi({
   reducerPath: "editResumeDB",
   baseQuery: fetchBaseQuery({
-    baseUrl: "https://dev.api.app.huntek.com/api/v1/profile/user-profiles",
+    baseUrl: "https://ec2-54-221-107-231.compute-1.amazonaws.com/api/v1/profile/user-profiles",
     prepareHeaders: (headers) => {
       const token = document.cookie
         .split("; ")
