@@ -137,7 +137,7 @@ const ProfileExt = () => {
 			setUpdated("Actualización exitosa");
 			setAllow(false);
 		} catch (error) {
-			setUpdated("Error en la actualización");
+			error.menssage ? setUpdated(error.menssage) : setUpdated("Error en la actualización");
 		}
 	};
 
